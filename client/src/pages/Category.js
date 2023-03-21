@@ -6,6 +6,7 @@ import Rating from "@mui/material/Rating";
 import Typography from "@mui/material/Typography";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHeart } from "@fortawesome/free-solid-svg-icons";
+import { useNavigate } from "react-router-dom";
 
 import moment from "moment";
 import "moment/locale/tr";
@@ -15,6 +16,8 @@ import { ScrollButton } from "../components/ScrolButton/ScrolButton";
 
 export const CategoryPage = () => {
   const { nesne } = useParams();
+  const navigate = useNavigate();
+
   const [value, setValue] = useState(4);
   const [isFavorite, setIsFavorite] = useState(false);
 
@@ -40,7 +43,14 @@ export const CategoryPage = () => {
         {/* 1 */}
         {ihale.map((item) => (
           <div key={item._id} className="flex flex-col w-72 shadow-md shadow-slate-400 transform transition duration-200 hover:-translate-y-4 hover:shadow-2xl hover:shadow-red-400">
-            <img className="w-full h-full object-cover" src={img} alt="" />
+            <img
+              onClick={() => {
+                navigate(`${item._id}`);
+              }}
+              className="w-full h-full object-cover cursor-pointer"
+              src={img}
+              alt=""
+            />
             <div className="container bg-white  ">
               <div className="flex flex-col space-y-4 ml-4">
                 <span className="text-sm mt-2">Bitiş tarihi : {moment(item.bitis_tarih).format("llll")}</span>

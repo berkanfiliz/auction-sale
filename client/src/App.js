@@ -1,0 +1,33 @@
+import "./App.css";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { HomePage } from "./pages/Home";
+import { NoPage } from "./pages/NoPage";
+import { Header } from "./components/Header/Header.js";
+import { Navbar } from "./components/Navbar/Navbar";
+import { LoginPage } from "./pages/Login";
+import { UseAuthContext } from "./hooks/useAuthContext";
+import { CategoryPage } from "./pages/Category";
+import { RegisterPage } from "./pages/Register";
+
+export default function App() {
+  const path = `/kategori/:nesne`;
+  //const { user } = UseAuthContext();
+
+  return (
+    <div className="App" style={{ backgroundColor: "#f2e9e4", height: "1500px" }}>
+      <BrowserRouter>
+        <Header />
+        <Navbar />
+        <div className="pages">
+          <Routes>
+            <Route path="/" element={<HomePage />} />
+            <Route path="/login" element={<LoginPage />} />
+            <Route path="/register" element={<RegisterPage />} />
+            <Route path="/kategori/:nesne" element={<CategoryPage />} />
+            <Route path="*" element={<NoPage />} />
+          </Routes>
+        </div>
+      </BrowserRouter>
+    </div>
+  );
+}

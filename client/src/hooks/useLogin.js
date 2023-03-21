@@ -1,10 +1,10 @@
 import { useState } from "react";
-import { UseAuthContext } from "./useAuthContext";
+import { useAuthContext } from "./useAuthContext";
 import * as api from "../api/index";
 
 export const useLogin = () => {
   const [hata, setHata] = useState(null);
-  const { dispatch } = UseAuthContext();
+  const { dispatch } = useAuthContext();
 
   const login = async (email, password) => {
     try {

@@ -1,5 +1,4 @@
 import { useState } from "react";
-import * as api from "../../api/index";
 import { useLogin } from "../../hooks/useLogin";
 
 export const Login = () => {
@@ -10,6 +9,7 @@ export const Login = () => {
     e.preventDefault();
     console.log(email, password);
     const sonuc = await login(email, password);
+    console.log(sonuc);
   };
   return (
     <div className="container mt-10 flex flex-col items-center w-3/4 h-[60vh] space-y-5">

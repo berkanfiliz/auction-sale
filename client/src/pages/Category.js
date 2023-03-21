@@ -28,7 +28,7 @@ export const CategoryPage = () => {
       setIhale(category.data.ihale);
     };
     fetchCategories();
-  }, []);
+  }, [nesne]);
 
   console.log(ihale);
 
@@ -36,10 +36,10 @@ export const CategoryPage = () => {
     <div className="container mt-10">
       <ScrollButton />
 
-      <div class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 gap-8">
+      <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 gap-8">
         {/* 1 */}
         {ihale.map((item) => (
-          <div className="flex flex-col w-72 shadow-md shadow-slate-400 transform transition duration-200 hover:-translate-y-4 hover:shadow-2xl hover:shadow-red-400">
+          <div key={item._id} className="flex flex-col w-72 shadow-md shadow-slate-400 transform transition duration-200 hover:-translate-y-4 hover:shadow-2xl hover:shadow-red-400">
             <img className="w-full h-full object-cover" src={img} alt="" />
             <div className="container bg-white  ">
               <div className="flex flex-col space-y-4 ml-4">

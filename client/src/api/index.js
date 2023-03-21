@@ -1,21 +1,17 @@
 import axios from "axios";
 
 export const getUser = () => {
-  const user = axios.get("/api/user/getUsers");
-  return user;
+  return axios.get("/api/user/getUsers");
 };
 
 export const login = (data) => {
-  const login = axios.post("/api/login", data);
-  return login;
+  return axios.post("/api/login", data);
 };
 
 export const fetchCategory = () => {
-  const categories = axios.get("/api/category");
-  return categories;
+  return axios.get("/api/category");
 };
 
 export const fetchWithCategoryFilter = (data) => {
-  const ihale = axios.get(`/api/ihale/kategori/${data}`);
-  return ihale;
+  return axios.get(`/api/ihale/kategori/${data}`);
 };

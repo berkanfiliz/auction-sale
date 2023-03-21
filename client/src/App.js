@@ -5,13 +5,13 @@ import { NoPage } from "./pages/NoPage";
 import { Header } from "./components/Header/Header.js";
 import { Navbar } from "./components/Navbar/Navbar";
 import { LoginPage } from "./pages/Login";
-import { UseAuthContext } from "./hooks/useAuthContext";
+import { useAuthContext } from "./hooks/useAuthContext";
 import { CategoryPage } from "./pages/Category";
 import { RegisterPage } from "./pages/Register";
 
 export default function App() {
-  const path = `/kategori/:nesne`;
-  const { user } = UseAuthContext();
+  //const path = `/kategori/:nesne`;
+  const { user } = useAuthContext();
 
   return (
     <div className="App" style={{ backgroundColor: "#f2e9e4", height: "1500px" }}>

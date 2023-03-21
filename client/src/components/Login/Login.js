@@ -3,16 +3,13 @@ import * as api from "../../api/index";
 import { useLogin } from "../../hooks/useLogin";
 
 export const Login = () => {
-  const { login } = useLogin();
+  const { login, hata } = useLogin();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const handleSubmit = async (e) => {
+    e.preventDefault();
     console.log(email, password);
     const sonuc = await login(email, password);
-    if (!sonuc) {
-      console.log("Error");
-    }
-    //console.log(sonuc.data.response);
   };
   return (
     <div className="container mt-10 flex flex-col items-center w-3/4 h-[60vh] space-y-5">
@@ -34,6 +31,7 @@ export const Login = () => {
       <button onClick={handleSubmit} className="border border-black p-3 rouded-md hover:bg-green-500">
         Gönder
       </button>
+      {hata && <div style={{ backgroundColor: "aqua", marginTop: "20px" }}>{hata}</div>}
     </div>
   );
 };

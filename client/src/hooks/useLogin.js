@@ -7,21 +7,20 @@ export const useLogin = () => {
   const { dispatch } = UseAuthContext();
 
   const login = async (email, password) => {
-    // const response = await fetch("/api/user/login", {
-    //   method: "POST",
-    //   body: JSON.stringify({ email, password }),
-    //   headers: {
-    //     "Content-Type": "application/json",
-    //   },
-    // });
-    // const json = await response.json();
     try {
       const data = { email, password };
       const response = await api.login(data);
+      const user = { _id: response.data.data._id, accessToken: response.data.accessToken };
+      dispatch({ type: "LOGIN", payload: user });
+      localStorage.setItem("user", JSON.stringify(user));
+      console.log(response);
       return response;
     } catch (error) {
-      console.log(error.response.data.message);
+      //console.log(error.response.data);
+      setHata(error.response.data.message);
+      return error.response;
+      //return error.response.data.message;
     }
   };
-  return { login };
+  return { login, hata };
 };

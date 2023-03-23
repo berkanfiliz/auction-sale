@@ -46,7 +46,7 @@ const ihaleSchema = new Schema(
       required: true,
     },
     teklifler: {
-      type: String,
+      type: Array,
     },
     yorumlar: {
       kullanici_id: { type: String },

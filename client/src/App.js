@@ -9,6 +9,7 @@ import { useAuthContext } from "./hooks/useAuthContext";
 import { CategoryPage } from "./pages/Category";
 import { RegisterPage } from "./pages/Register";
 import { ContentPage } from "./pages/Content";
+import { IhaleRoomPage } from "./pages/IhaleRoom";
 
 export default function App() {
   //const path = `/kategori/:nesne`;
@@ -26,6 +27,7 @@ export default function App() {
             <Route path="/register" element={!user ? <RegisterPage /> : <Navigate to="/" />} />
             <Route path="/kategori/:nesne" element={<CategoryPage />} />
             <Route path="/kategori/:nesne/:id" element={<ContentPage />} />
+            <Route path="/room/:id" element={user ? <IhaleRoomPage /> : <Navigate to="/login" />} />
             <Route path="*" element={<NoPage />} />
           </Routes>
         </div>

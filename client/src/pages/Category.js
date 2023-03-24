@@ -7,10 +7,8 @@ import Typography from "@mui/material/Typography";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHeart } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from "react-router-dom";
-
 import moment from "moment";
 import "moment/locale/tr";
-
 import img from "../assets/kitap.jpg";
 import { ScrollButton } from "../components/ScrolButton/ScrolButton";
 
@@ -20,11 +18,11 @@ export const CategoryPage = () => {
 
   const [value, setValue] = useState(4);
   const [isFavorite, setIsFavorite] = useState(false);
+  const [ihale, setIhale] = useState([]);
 
   function handleFavoriteClick() {
     setIsFavorite(!isFavorite);
   }
-  const [ihale, setIhale] = useState([]);
   useEffect(() => {
     const fetchCategories = async () => {
       const category = await api.fetchWithCategoryFilter(nesne);
@@ -77,7 +75,9 @@ export const CategoryPage = () => {
 
                 <div className="flex items-center">
                   <div className=" w-1/2 mb-2">
-                    <button className="bg-yellow-400 w-full rounded-md  text-white py-2">KATIL</button>
+                    <button className="bg-yellow-400 w-full rounded-md  text-white py-2" onClick={() => navigate(`/room/${item._id}`)}>
+                      KATIL
+                    </button>
                   </div>
                   <div className="w-1/2 ml-4 mb-2 space-x-3">
                     <button onClick={handleFavoriteClick} className="p-1 px-2 rounded-md text-xl">

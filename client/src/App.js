@@ -28,6 +28,7 @@ export default function App() {
             <Route path="/kategori/:nesne" element={<CategoryPage />} />
             <Route path="/kategori/:nesne/:id" element={<ContentPage />} />
             <Route path="/room/:id" element={user ? <IhaleRoomPage /> : <Navigate to="/login" />} />
+            {/* <Route path="/room/:id" element={<IhaleRoomPage />} /> */}
             <Route path="*" element={<NoPage />} />
           </Routes>
         </div>

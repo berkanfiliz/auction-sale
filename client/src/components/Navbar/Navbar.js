@@ -18,6 +18,17 @@ export const Navbar = () => {
             <li>
               <div
                 onClick={() => {
+                  navigate("/create");
+                }}
+                className="flex space-x-4 items-center px-3 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white cursor-pointer"
+              >
+                <i className="fa-regular fa-plus ml-5"></i>
+                <p>Create Ihale</p>
+              </div>
+            </li>
+            <li>
+              <div
+                onClick={() => {
                   navigate("/profile");
                 }}
                 className="flex space-x-4 items-center px-3 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white cursor-pointer"

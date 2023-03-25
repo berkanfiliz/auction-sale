@@ -10,6 +10,8 @@ import { CategoryPage } from "./pages/Category";
 import { RegisterPage } from "./pages/Register";
 import { ContentPage } from "./pages/Content";
 import { IhaleRoomPage } from "./pages/IhaleRoom";
+import { AllProductPage } from "./pages/AllProduct";
+import { CreatePage } from "./pages/Create";
 
 export default function App() {
   //const path = `/kategori/:nesne`;
@@ -25,9 +27,12 @@ export default function App() {
             <Route path="/" element={<HomePage />} />
             <Route path="/login" element={!user ? <LoginPage /> : <Navigate to="/" />} />
             <Route path="/register" element={!user ? <RegisterPage /> : <Navigate to="/" />} />
+            <Route path="/allproducts" element={<AllProductPage />} />
             <Route path="/kategori/:nesne" element={<CategoryPage />} />
             <Route path="/kategori/:nesne/:id" element={<ContentPage />} />
             <Route path="/room/:id" element={user ? <IhaleRoomPage /> : <Navigate to="/login" />} />
+            <Route path="/create" element={user ? <CreatePage /> : <Navigate to="/login" />} />
+
             {/* <Route path="/room/:id" element={<IhaleRoomPage />} /> */}
             <Route path="*" element={<NoPage />} />
           </Routes>

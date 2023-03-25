@@ -11,9 +11,9 @@ import moment from "moment";
 import "moment/locale/tr";
 import img from "../assets/kitap.jpg";
 import { ScrollButton } from "../components/ScrolButton/ScrolButton";
+import axios from "axios";
 
-export const CategoryPage = () => {
-  const { nesne } = useParams();
+export const AllProductPage = () => {
   const navigate = useNavigate();
 
   const [value, setValue] = useState(4);
@@ -25,11 +25,11 @@ export const CategoryPage = () => {
   }
   useEffect(() => {
     const fetchCategories = async () => {
-      const category = await api.fetchWithCategoryFilter(nesne);
-      setIhale(category.data.ihale);
+      const ihale = await axios.get("/api/ihale");
+      setIhale(ihale.data.ihale);
     };
     fetchCategories();
-  }, [nesne]);
+  }, []);
 
   console.log("İhale = ", ihale);
   const filteredIhale = ihale.filter((item) => item.durum === true);
@@ -44,7 +44,7 @@ export const CategoryPage = () => {
           <div key={item._id} className="flex flex-col w-72 shadow-md shadow-slate-400 transform transition duration-200 hover:-translate-y-4 hover:shadow-2xl hover:shadow-red-400">
             <img
               onClick={() => {
-                navigate(`${item._id}`);
+                navigate(`/kategori/${item.kategori}/${item._id}`);
               }}
               className="w-full h-full object-cover cursor-pointer"
               src={img}

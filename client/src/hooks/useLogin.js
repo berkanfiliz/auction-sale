@@ -3,7 +3,7 @@ import { useAuthContext } from "./useAuthContext";
 import * as api from "../api/index";
 
 export const useLogin = () => {
-  const [hata, setHata] = useState(null);
+  //const [hata, setHata] = useState(null);
   const { dispatch } = useAuthContext();
 
   const login = async (email, password) => {
@@ -17,10 +17,10 @@ export const useLogin = () => {
       return response;
     } catch (error) {
       //console.log(error.response.data);
-      setHata(error.response.data.message);
+      //setHata(error.response.data.message);
       return error.response;
       //return error.response.data.message;
     }
   };
-  return { login, hata };
+  return { login };
 };

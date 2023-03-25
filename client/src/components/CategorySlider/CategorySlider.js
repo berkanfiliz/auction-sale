@@ -55,7 +55,12 @@ export const CategorySlider = () => {
   return (
     <div className="container mt-5">
       <Slider {...settings}>
-        <div className="flex justify-center items-center content h-28 bg-slate-300 hover:bg-slate-400 rounded-md cursor-pointer transition-all duration-300">
+        <div
+          className="flex justify-center items-center content h-28 bg-slate-300 hover:bg-slate-400 rounded-md cursor-pointer transition-all duration-300"
+          onClick={() => {
+            navigate("/allproducts");
+          }}
+        >
           <i className="fa fa-bars text-2xl text-center"></i>
           <p>Tüm İhaleler</p>
         </div>

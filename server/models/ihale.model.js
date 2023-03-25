@@ -7,9 +7,9 @@ const ihaleSchema = new Schema(
     katilimci_id: {
       type: Array,
     },
-    // kazanan_id: {
-    //   type: String,
-    // },
+    olusturan_id: {
+      type: String,
+    },
     durum: {
       type: Boolean,
       default: true,

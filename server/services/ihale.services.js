@@ -1,7 +1,7 @@
 const ihaleModel = require("../models/ihale.model");
 
 const createihale = (data) => {
-  return ihaleModel.create(data);
+  return ihaleModel.create({ ...data, image_url: req.files.map((file) => file.filename) });
 };
 const getAllihale = () => {
   return ihaleModel.find({});

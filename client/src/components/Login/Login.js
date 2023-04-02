@@ -33,7 +33,7 @@ export const Login = () => {
           setPassword(e.target.value);
         }}
         className="w-1/2"
-        type="text"
+        type="password"
       />
       <button onClick={handleSubmit} className="border border-black p-3 rouded-md hover:bg-green-500">
         Gönder

@@ -5,10 +5,12 @@ const { Schema } = mongoose;
 const ihaleSchema = new Schema(
   {
     katilimci_id: {
-      type: Array,
+      type: Schema.Types.ObjectId,
+      ref: "user",
     },
     olusturan_id: {
-      type: String,
+      type: Schema.Types.ObjectId,
+      ref: "ihale",
     },
     durum: {
       type: Boolean,
@@ -26,9 +28,11 @@ const ihaleSchema = new Schema(
       type: String,
       required: true,
     },
-    image_url: {
-      type: Array,
-    },
+    image_urls: [
+      {
+        type: String,
+      },
+    ],
     baslangic_fiyat: {
       type: Number,
       required: true,
@@ -49,11 +53,11 @@ const ihaleSchema = new Schema(
       type: Array,
     },
     yorumlar: {
-      kullanici_id: { type: String },
+      kullanici_id: { type: Schema.Types.ObjectId, ref: "user" },
       yorum: { type: String },
     },
     degerlendirme: {
-      kullanici_id: { type: String },
+      kullanici_id: { type: Schema.Types.ObjectId, ref: "user" },
       puan: { type: Number },
     },
   },

@@ -43,7 +43,6 @@ export const IhaleRoomPage = () => {
     console.log("Socket değişti");
     socketRef.current.on("messageReturn", (data) => {
       console.log("Data = ", data);
-      const teklif = data.teklifler;
       // const teklifVeren = data.teklifVeren;
       setTeklifler([...data.teklifler]);
     });
@@ -94,7 +93,7 @@ export const IhaleRoomPage = () => {
       // if (verilenteklif < tekliflerdb[0].teklif) {
       //   console.log("Teklifiniz geçersiz");
       // }
-      if (tekliflerdb.length != 0) {
+      if (tekliflerdb.length !== 0) {
         console.log("tekliflerdb length = " + tekliflerdb.length);
         // const vt = parseInt(verilenteklif);
         // const dbt = parseInt(tekliflerdb[0].teklif);
@@ -114,7 +113,7 @@ export const IhaleRoomPage = () => {
         teklifler: yeniTeklifler,
         id,
       });
-      const verilenteklifdb = await axios.patch(`/api/ihale/${id}`, { teklifler: yeniTeklifler });
+      await axios.patch(`/api/ihale/${id}`, { teklifler: yeniTeklifler });
       setTeklifler(yeniTeklifler);
       toast.success(`Teklifiniz başarili... ${verilenteklif} TL`, {
         position: toast.POSITION.TOP_CENTER,
@@ -127,14 +126,15 @@ export const IhaleRoomPage = () => {
 
   return (
     <div className="container">
+      {/* <ToastContainer /> */}
       <div className="grid grid-cols-2 lg:grid-cols-3">
         <div className="space-y-2 mt-10 lg:col-span-2">
-          {teklifler.length == 0 && <h1 className="text-center text-3xl text-red-600 mt-32">VERİLMİŞ TEKLİF YOKTUR</h1>}
+          {teklifler.length === 0 && <h1 className="text-center text-3xl text-red-600 mt-32">VERİLMİŞ TEKLİF YOKTUR</h1>}
           {verilenteklif && <ToastContainer />}
           {teklifler &&
             teklifler.map((item) => (
               <div className="flex flex-col justify-between p-[6px] items-center border-2 border-black bg-slate-50 hover:bg-slate-200">
-                <div>Teklif veren = {item.id}</div>
+                <div className="text-center">Teklif veren = {item.id}</div>
                 <div>Teklif = {item.teklif} TL</div>
               </div>
             ))}

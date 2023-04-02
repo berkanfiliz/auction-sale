@@ -1,6 +1,9 @@
 const router = require("express").Router();
+const authMiddleware = require("../middlewares/auth.middleware");
+const multer = require("multer");
+const { upload } = require("../middlewares/multer.middleware");
 
-const { fetchAll, fetch, createIhale, updateIhale, deleteIhale, fetchWithCategoryFilter, joinIhale } = require("../controllers/ihale.controllers");
+const { fetchAll, fetch, createIhale, updateIhale, deleteIhale, fetchWithCategoryFilter } = require("../controllers/ihale.controllers");
 
 router.get("/", fetchAll);
 
@@ -8,9 +11,9 @@ router.get("/kategori/:id", fetchWithCategoryFilter);
 
 router.get("/:id", fetch);
 
-router.post("/", createIhale);
+router.post("/", upload.array("images"), createIhale);
 
-//router.post("/", joinIhale);
+// router.post("/", authMiddleware, createIhale);
 
 router.patch("/:id", updateIhale);
 

@@ -1,4 +1,5 @@
 const ihaleServices = require("../services/ihale.services");
+const ihaleModel = require("../models/ihale.model");
 
 const fetchAll = async (req, res) => {
   try {
@@ -21,9 +22,23 @@ const fetch = async (req, res) => {
   }
 };
 
+// const createIhale = async (req, res) => {
+//   try {
+//     const ihale = await ihaleServices.createihale(req.body);
+//     res.status(201).json({ success: true, message: "Successfully created", ihale });
+//   } catch (error) {
+//     res.status(400).json({ success: false, message: error.message });
+//   }
+// };
 const createIhale = async (req, res) => {
   try {
-    const ihale = await ihaleServices.createihale(req.body);
+    const { body, files } = req;
+
+    // Map uploaded images to image_url array
+    const image_url = files.map((file) => file.path.replace("public/", ""));
+
+    const ihale = await ihaleModel.create({ ...body, image_urls: image_url });
+
     res.status(201).json({ success: true, message: "Successfully created", ihale });
   } catch (error) {
     res.status(400).json({ success: false, message: error.message });
@@ -67,16 +82,11 @@ const fetchWithCategoryFilter = async (req, res) => {
   }
 };
 
-const joinIhale = (req, res) => {
-  //Burda ihaleye katılım gerçekleştirilecek. Bu işlemi yaparken, İhaleye katıl diyen user'ın
-};
-
 module.exports = {
   fetchAll,
   fetch,
   createIhale,
   updateIhale,
   deleteIhale,
-  joinIhale,
   fetchWithCategoryFilter,
 };

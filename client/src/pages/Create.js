@@ -10,6 +10,7 @@ export const CreatePage = () => {
   const [kategori, setKategori] = useState([]);
   const [image, setImage] = useState("");
   const [basarili, setBasarili] = useState(false);
+  const [uploadimage, setUploadimage] = useState(null);
 
   const { user } = useAuthContext();
 
@@ -30,8 +31,18 @@ export const CreatePage = () => {
       setImage(fileReader.result);
     };
     fileReader.readAsDataURL(acceptedFiles[0]);
+    setUploadimage(acceptedFiles[0]);
   };
   const handleClick = async () => {
+    if (new Date(tarih) < new Date()) {
+      setBasarili(true);
+      toast.error("Geçersiz tarih! Lütfen ileri bir zaman seçiniz", {
+        position: toast.POSITION.TOP_CENTER,
+        autoClose: 2000,
+      });
+      console.log("Gecersiz eski tarih");
+      return;
+    }
     const ihale = {
       olusturan_id: user._id,
       bitis_tarih: tarih,
@@ -41,9 +52,21 @@ export const CreatePage = () => {
       artis_miktari: artismiktar,
       minimum_satis_yuzde: satisyuzde,
       kategori: ihaleKategori,
+      images: uploadimage,
     };
+    console.log(ihale);
     try {
-      const response = await axios.post("/api/ihale", ihale);
+      // const response = await axios.post("/api/ihale", ihale, {
+      //   headers: {
+      //     Authorization: `Bearer ${user.accessToken}`,
+      //   },
+      // });
+      const response = await axios.post("/api/ihale", ihale, {
+        headers: {
+          Authorization: `Bearer ${user.accessToken}`,
+          "Content-Type": "multipart/form-data",
+        },
+      });
       setBasarili(true);
       toast.success("İhale olusturma islemi basarili", {
         position: toast.POSITION.TOP_CENTER,
@@ -59,6 +82,11 @@ export const CreatePage = () => {
       setSatisYuzde("");
       setImage("");
     } catch (error) {
+      toast.error("Lütfen tüm alanlari eksiksiz doldurun", {
+        position: toast.POSITION.TOP_CENTER,
+        autoClose: 2000,
+      });
+      setBasarili(true);
       console.log(error);
     }
   };
@@ -113,7 +141,7 @@ export const CreatePage = () => {
           <input value={satisyuzde} onChange={(e) => setSatisYuzde(e.target.value)} className="w-2/3 bg-gray-200" type="number" />
         </div>
         <div className="flex flex-col justify-center items-center space-y-10">
-          <Dropzone onDrop={handleDrop}>
+          <Dropzone onDrop={handleDrop} accept="image/*">
             {({ getRootProps, getInputProps }) => (
               <div {...getRootProps()} className="h-[250px] w-[70%] border border-black rounded-sm bg-white">
                 <input {...getInputProps()} />
@@ -132,6 +160,7 @@ export const CreatePage = () => {
             KAYDET
           </button>
           {basarili && <ToastContainer />}
+          {/* <ToastContainer /> */}
         </div>
       </div>
     </div>

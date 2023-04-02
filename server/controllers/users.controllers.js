@@ -36,7 +36,7 @@ const fetchUser = async (req, res, next) => {
   try {
     const user = await userServices.getuserwithid(req.params.id);
     if (!user) {
-      throw Error("Kullanıcı bulunamadi");
+      throw Error("Kullanici bulunamadi");
     }
     res.status(200).json({ success: true, message: user });
   } catch (error) {

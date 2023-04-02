@@ -46,15 +46,17 @@ export const CategoryPage = () => {
               onClick={() => {
                 navigate(`${item._id}`);
               }}
-              className="w-full h-full object-cover cursor-pointer"
-              src={img}
+              className="w-full h-[300px] object-contain mx-auto cursor-pointer"
+              src={`http://localhost:4000/` + item.image_urls[0]}
               alt=""
             />
             <div className="container bg-white  ">
               <div className="flex flex-col space-y-4 ml-4">
                 <span className="text-sm mt-2">Bitiş tarihi : {moment(item.bitis_tarih).format("llll")}</span>
                 <p className="text-3xl">{item.baslik}</p>
-                <p className="text-md mr-2">{item.aciklama}</p>
+                <p className="text-md mr-2" style={{ wordBreak: "break-all" }}>
+                  {item.aciklama.slice(0, 145)}...
+                </p>
                 <div>
                   <p className="text-center mr-4 text-red-600">BAŞLANGIÇ FİYAT</p>
                   <p className="text-xl text-center mr-4 text-red-600 underline">{item.baslangic_fiyat} TL</p>

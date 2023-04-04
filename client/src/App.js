@@ -12,13 +12,14 @@ import { ContentPage } from "./pages/Content";
 import { IhaleRoomPage } from "./pages/IhaleRoom";
 import { AllProductPage } from "./pages/AllProduct";
 import { CreatePage } from "./pages/Create";
+import { ProfilePage } from "./pages/Profile";
 
 export default function App() {
   //const path = `/kategori/:nesne`;
   const { user } = useAuthContext();
 
   return (
-    <div className="App" style={{ backgroundColor: "#f2e9e4", height: "1500px" }}>
+    <div className="App hero__scrim">
       <BrowserRouter>
         <Header />
         <Navbar />
@@ -32,6 +33,7 @@ export default function App() {
             <Route path="/kategori/:nesne/:id" element={<ContentPage />} />
             <Route path="/room/:id" element={user ? <IhaleRoomPage /> : <Navigate to="/login" />} />
             <Route path="/create" element={user ? <CreatePage /> : <Navigate to="/login" />} />
+            <Route path="/profile" element={user ? <ProfilePage /> : <Navigate to="/login" />} />
 
             {/* <Route path="/room/:id" element={<IhaleRoomPage />} /> */}
             <Route path="*" element={<NoPage />} />

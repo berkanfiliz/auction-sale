@@ -1,0 +1,11 @@
+.slick-prev:before,
+.slick-next:before {
+  color: black;
+}
+.slider-wrapper {
+  display: flex;
+  justify-content: center;
+}
+.cat {
+  background-color: white !important;
+}

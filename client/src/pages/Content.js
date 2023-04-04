@@ -3,7 +3,6 @@ import { useParams, useNavigate } from "react-router-dom";
 import { format } from "date-fns";
 import axios from "axios";
 import { useAuthContext } from "../hooks/useAuthContext";
-import { IhaleContent } from "../components/IhaleContent/IhaleContent";
 
 export const ContentPage = () => {
   const navigate = useNavigate();
@@ -12,12 +11,15 @@ export const ContentPage = () => {
   const [countdown, setCountdown] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
   const [endTime, setEndTime] = useState("");
   const [buttonVisibility, setButtonVisibility] = useState(false);
+  const [ihale, setIhale] = useState(null);
 
   useEffect(() => {
     const fetchIhale = async () => {
       try {
         const response = await axios.get(`/api/ihale/${id}`);
+        setIhale(response.data.ihale);
         const endTime = response.data.ihale.bitis_tarih;
+        console.log(response.data.ihale);
         setEndTime(endTime);
       } catch (error) {
         console.error(error);
@@ -60,9 +62,19 @@ export const ContentPage = () => {
   return (
     <div className="container">
       <div className="grid grid-cols-2">
-        <div>Burasi Aciklama</div>
+        <div className="flex flex-col mt-10 space-y-10">
+          {ihale && <div className="text-4xl text-center font-bold font-serif">{ihale.baslik.toUpperCase()}</div>}
+          <div>{ihale && <img className="w-full h-auto" src={`http://localhost:4000/${ihale.image_urls[0]}`} alt="" />}</div>
+        </div>
         <div className="flex flex-col justify-center items-end space-y-5 mt-10">
-          <div className="bg-slate-500 w-[350px] py-20 text-white text-center">BURASI BİLGİLER BÖLÜMÜ</div>
+          {ihale && ihale.teklifler.length === 0 ? (
+            <div className="bg-slate-500 w-[350px] py-20 text-white text-center flex flex-col space-y-5">
+              <div className="text-2xl font-bold font-mono">HERHANGİ BİR TEKLİF YOKTUR</div>
+              <div>BASLANGİC FİYAT = {ihale.baslangic_fiyat} TL</div>
+            </div>
+          ) : (
+            <div className="bg-slate-500 w-[350px] py-20 text-white text-center flex flex-col space-y-5">{ihale && <div className="text-2xl font-bold font-mono">GUNCEL TEKLİF = {ihale.teklifler[0].teklif} TL</div>}</div>
+          )}
           <div className="bg-slate-500 w-[350px] py-20 text-white flex flex-col space-y-8 items-center justify-center">
             <div className="flex justify-center items-center space-x-10">
               <div className="flex flex-col justify-center items-center">

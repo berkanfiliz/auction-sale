@@ -5,18 +5,39 @@ import io from "socket.io-client";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
+import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
+import Typography from "@mui/material/Typography";
+import Modal from "@mui/material/Modal";
+
+const style = {
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  width: 400,
+  bgcolor: "background.paper",
+  border: "2px solid #000",
+  boxShadow: 24,
+  p: 4,
+};
+
 export const IhaleRoomPage = () => {
   const socketRef = useRef(null);
   //4000 e döndür olmazsa
   const { id } = useParams();
   const user = JSON.parse(localStorage.getItem("user"));
   //console.log("User = " + user._id);
+  const [ekstraartis, setEkstraartis] = useState(null);
 
   const [verilenteklif, setVerilenteklif] = useState(null);
   const [teklifler, setTeklifler] = useState([]);
+  const [artismiktar, setArtismiktar] = useState(null);
   const [countdown, setCountdown] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
   const [endTime, setEndTime] = useState("");
   const [buttonVisibility, setButtonVisibility] = useState(false);
+
+  const [open, setOpen] = useState(false);
 
   useEffect(() => {
     socketRef.current = io.connect("http://localhost:8900"); //4000 e döndür olmazsa
@@ -25,9 +46,17 @@ export const IhaleRoomPage = () => {
 
     const tekliflerDoldur = async () => {
       const ihale = await axios.get(`/api/ihale/${id}`);
+      setArtismiktar(ihale.data.ihale.artis_miktari);
       const endTime = ihale.data.ihale.bitis_tarih;
       const teklifdb = ihale.data.ihale.teklifler;
+      console.log("Teklifdb = " + teklifdb);
       setTeklifler(teklifdb);
+      if (teklifdb.length === 0) {
+        console.log("DB bos");
+        setVerilenteklif(ihale.data.ihale.baslangic_fiyat);
+      } else {
+        setVerilenteklif(ihale.data.ihale.teklifler[0].teklif + ihale.data.ihale.artis_miktari);
+      }
       setEndTime(endTime);
     };
 
@@ -79,43 +108,108 @@ export const IhaleRoomPage = () => {
   }, [endTime]);
 
   //teklif ver tuşuna basıldığı zaman
+  // const teklifVer = async () => {
+  //   try {
+  //     const ihale = await axios.get(`/api/ihale/${id}`);
+  //     const tekliflerdb = ihale.data.ihale.teklifler;
+  //     if (ihale.data.ihale.baslangic_fiyat > verilenteklif) {
+  //       toast.error(`Minimum tutari geçmelisiniz  ${ihale.data.ihale.baslangic_fiyat}TL`, {
+  //         position: toast.POSITION.TOP_CENTER,
+  //         autoClose: 2000,
+  //       });
+  //       return;
+  //     }
+  //     if (tekliflerdb.length !== 0) {
+  //       console.log("tekliflerdb length = " + tekliflerdb.length);
+  //       if (parseInt(verilenteklif) <= parseInt(tekliflerdb[0].teklif)) {
+  //         console.log("Teklifdb teklif = " + tekliflerdb[0].teklif);
+  //         console.log("Verilen teklif = " + verilenteklif);
+  //         toast.error(`Verilen maksimum teklifi geçmelisiniz, Maksimum teklif    ${ihale.data.ihale.teklifler[0].teklif} TL`, {
+  //           position: toast.POSITION.TOP_CENTER,
+  //           autoClose: 2000,
+  //         });
+  //         console.log("Verilen maksimum teklifi geçmelisiniz, Maksimum teklif    ", ihale.data.ihale.teklifler[0].teklif);
+  //         return;
+  //       }
+  //     }
+  //     const yeniTeklifler = [{ id: user._id, teklif: verilenteklif }, ...teklifler];
+  //     await socketRef.current.emit("teklif", {
+  //       teklifler: yeniTeklifler,
+  //       id,
+  //     });
+  //     await axios.patch(`/api/ihale/${id}`, { teklifler: yeniTeklifler });
+  //     setTeklifler(yeniTeklifler);
+  //     toast.success(`Teklifiniz başarili... ${verilenteklif} TL`, {
+  //       position: toast.POSITION.TOP_CENTER,
+  //       autoClose: 2000,
+  //     });
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
+
   const teklifVer = async () => {
     try {
       const ihale = await axios.get(`/api/ihale/${id}`);
+
       const tekliflerdb = ihale.data.ihale.teklifler;
-      if (ihale.data.ihale.baslangic_fiyat > verilenteklif) {
-        toast.error(`Minimum tutari geçmelisiniz  ${ihale.data.ihale.baslangic_fiyat}TL`, {
-          position: toast.POSITION.TOP_CENTER,
-          autoClose: 2000,
-        });
-        return;
+      let sonTeklif = 0;
+      if (tekliflerdb.length === 0) {
+        sonTeklif = verilenteklif;
       }
-      // if (verilenteklif < tekliflerdb[0].teklif) {
-      //   console.log("Teklifiniz geçersiz");
-      // }
       if (tekliflerdb.length !== 0) {
-        console.log("tekliflerdb length = " + tekliflerdb.length);
-        // const vt = parseInt(verilenteklif);
-        // const dbt = parseInt(tekliflerdb[0].teklif);
-        if (parseInt(verilenteklif) <= parseInt(tekliflerdb[0].teklif)) {
-          console.log("Teklifdb teklif = " + tekliflerdb[0].teklif);
-          console.log("Verilen teklif = " + verilenteklif);
-          toast.error(`Verilen maksimum teklifi geçmelisiniz, Maksimum teklif    ${ihale.data.ihale.teklifler[0].teklif} TL`, {
-            position: toast.POSITION.TOP_CENTER,
-            autoClose: 2000,
-          });
-          console.log("Verilen maksimum teklifi geçmelisiniz, Maksimum teklif    ", ihale.data.ihale.teklifler[0].teklif);
-          return;
-        }
+        sonTeklif = ihale.data.ihale.teklifler[0].teklif + artismiktar;
       }
-      const yeniTeklifler = [{ id: user._id, teklif: verilenteklif }, ...teklifler];
+      const yeniTeklifler = [{ id: user._id, teklif: sonTeklif }, ...teklifler];
       await socketRef.current.emit("teklif", {
         teklifler: yeniTeklifler,
         id,
       });
       await axios.patch(`/api/ihale/${id}`, { teklifler: yeniTeklifler });
       setTeklifler(yeniTeklifler);
-      toast.success(`Teklifiniz başarili... ${verilenteklif} TL`, {
+      toast.success(`Teklifiniz başarili... ${sonTeklif} TL`, {
+        position: toast.POSITION.TOP_CENTER,
+        autoClose: 2000,
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const ekstraTeklif = async () => {
+    try {
+      const ihale = await axios.get(`/api/ihale/${id}`);
+      const tekliflerdb = ihale.data.ihale.teklifler;
+      const girilendeger = 100;
+      let sonTeklif = 0;
+      if (ekstraartis < artismiktar) {
+        setOpen(false);
+        toast.error(`Minimum artis miktari ${artismiktar} TL'dir`, {
+          position: toast.POSITION.TOP_CENTER,
+          autoClose: 2000,
+        });
+        return;
+      }
+      if (!ekstraartis) {
+        console.log("Ekstra artis bos");
+        return;
+      }
+      if (tekliflerdb.length === 0) {
+        sonTeklif = verilenteklif + parseInt(ekstraartis);
+      }
+      if (tekliflerdb.length !== 0) {
+        sonTeklif = ihale.data.ihale.teklifler[0].teklif + parseInt(ekstraartis);
+      }
+      const yeniTeklifler = [{ id: user._id, teklif: sonTeklif }, ...teklifler];
+      await socketRef.current.emit("teklif", {
+        teklifler: yeniTeklifler,
+        id,
+      });
+      await axios.patch(`/api/ihale/${id}`, { teklifler: yeniTeklifler });
+      setTeklifler(yeniTeklifler);
+      setOpen(false);
+      setEkstraartis("");
+      toast.success(`Teklifiniz başarili... ${sonTeklif} TL`, {
         position: toast.POSITION.TOP_CENTER,
         autoClose: 2000,
       });
@@ -160,24 +254,45 @@ export const IhaleRoomPage = () => {
             {/* {countdown.days} GÜN {countdown.hours} SAAT {countdown.minutes} DAKİKA {countdown.seconds} SANİYE */}
           </div>
           {buttonVisibility && (
-            <div className="bg-slate-500 w-[270px] lg:w-[350px] py-20 text-white text-center rounded-md">
-              <div className="flex flex-col justify-center items-center">
-                Ihale Room Page
-                <input
-                  className="text-black"
-                  type="number"
-                  onChange={(e) => {
-                    setVerilenteklif(e.target.value);
-                  }}
-                />
-                <button onClick={teklifVer} className="bg-blue-600 p-3 mt-5">
-                  Teklif ver
-                </button>
-              </div>
+            <div className="bg-slate-500 w-[270px] lg:w-[350px] h-[220px] border text-white text-center rounded-md flex justify-center items-center space-x-10">
+              <button
+                className="bg-green-600 p-3 mt-5"
+                onClick={() => {
+                  setOpen(true);
+                }}
+              >
+                Arttırılmış Teklif
+              </button>
+              <button onClick={teklifVer} className="bg-green-600 p-3 mt-5">
+                Teklif ver
+              </button>
             </div>
           )}
         </div>
       </div>
+      <Modal
+        open={open}
+        onClose={() => {
+          setOpen(false);
+        }}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box sx={style}>
+          <div className="flex flex-col justify-center items-center">
+            <input
+              className="text-black"
+              type="number"
+              onChange={(e) => {
+                setEkstraartis(e.target.value);
+              }}
+            />
+            <button className="bg-green-500 p-3 mt-5" onClick={ekstraTeklif}>
+              Teklif Ver
+            </button>
+          </div>
+        </Box>
+      </Modal>
     </div>
   );
 };

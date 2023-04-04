@@ -49,9 +49,16 @@ const ihaleSchema = new Schema(
       type: String,
       required: true,
     },
-    teklifler: {
-      type: Array,
-    },
+    // teklifler: {
+    //   type: Array,
+    // },
+    teklifler: [
+      {
+        _id: false,
+        id: { type: Schema.Types.ObjectId },
+        teklif: { type: Number },
+      },
+    ],
     yorumlar: {
       kullanici_id: { type: Schema.Types.ObjectId, ref: "user" },
       yorum: { type: String },

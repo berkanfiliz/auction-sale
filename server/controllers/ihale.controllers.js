@@ -1,4 +1,5 @@
 const ihaleServices = require("../services/ihale.services");
+const userServices = require("../services/user.services");
 const ihaleModel = require("../models/ihale.model");
 
 const fetchAll = async (req, res) => {
@@ -81,6 +82,19 @@ const fetchWithCategoryFilter = async (req, res) => {
     res.status(400).json({ success: false, message: error.message });
   }
 };
+const fetchIhaleWithCreatorId = async (req, res) => {
+  try {
+    const user = await userServices.getuserwithid(req.params.id);
+    if (!user) {
+      throw Error("Kullanici bulunamadi");
+    }
+    const ihaleler = await ihaleModel.find({ olusturan_id: req.params.id });
+    res.status(200).json({ success: true, ihaleler });
+    //const ihale = ihaleModel.
+  } catch (error) {
+    res.status(400).json({ success: false, message: error.message });
+  }
+};
 
 module.exports = {
   fetchAll,
@@ -89,4 +103,5 @@ module.exports = {
   updateIhale,
   deleteIhale,
   fetchWithCategoryFilter,
+  fetchIhaleWithCreatorId,
 };

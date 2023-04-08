@@ -14,10 +14,10 @@ const ihaleKazancShema = new Schema(
       required: true,
       ref: "user",
     },
-    yedek_id: {
-      type: Schema.Types.ObjectId,
-      ref: "user",
-    },
+    // yedek_id: {
+    //   type: Schema.Types.ObjectId,
+    //   ref: "user",
+    // },
     kazanan_teklif: {
       type: String,
       required: true,

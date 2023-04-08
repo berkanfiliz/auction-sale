@@ -52,15 +52,15 @@ export const ProfilePage = () => {
 
       <TabPanel value={value} index={0}>
         <h2>İLANLARIM</h2>
-        <p>Contents of the My Houses tab go here.</p>
+        <p>Buraya oluşturulan ihaleler koyulacak.</p>
       </TabPanel>
       <TabPanel value={value} index={1}>
-        <h2>Visited Houses</h2>
-        <p>Contents of the Visited Houses tab go here.</p>
+        <h2>FAVORILERIM</h2>
+        <p>Buraya favorilere eklenen ihaleler koyulacak.</p>
       </TabPanel>
       <TabPanel value={value} index={2}>
-        <h2>Favorite Houses</h2>
-        <p>Contents of the Favorite Houses tab go here.</p>
+        <h2>TEKLİF VERİLEN İLANLAR</h2>
+        <p>Buraya Teklif verilen ve süren ilanlar koyulacak.</p>
       </TabPanel>
     </div>
   );

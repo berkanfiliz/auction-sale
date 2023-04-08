@@ -26,6 +26,9 @@ export const ContentPage = () => {
       }
     };
     fetchIhale();
+    return () => {
+      setEndTime("");
+    };
   }, [id]);
 
   useEffect(() => {

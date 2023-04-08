@@ -6,7 +6,7 @@ import { Header } from "./components/Header/Header.js";
 import { Navbar } from "./components/Navbar/Navbar";
 import { LoginPage } from "./pages/Login";
 import { useAuthContext } from "./hooks/useAuthContext";
-import { CategoryPage } from "./pages/Category";
+import { CategoryRoomPage } from "./pages/CategoryRoom";
 import { RegisterPage } from "./pages/Register";
 import { ContentPage } from "./pages/Content";
 import { IhaleRoomPage } from "./pages/IhaleRoom";
@@ -29,7 +29,7 @@ export default function App() {
             <Route path="/login" element={!user ? <LoginPage /> : <Navigate to="/" />} />
             <Route path="/register" element={!user ? <RegisterPage /> : <Navigate to="/" />} />
             <Route path="/allproducts" element={<AllProductPage />} />
-            <Route path="/kategori/:nesne" element={<CategoryPage />} />
+            <Route path="/kategori/:nesne" element={<CategoryRoomPage />} />
             <Route path="/kategori/:nesne/:id" element={<ContentPage />} />
             <Route path="/room/:id" element={user ? <IhaleRoomPage /> : <Navigate to="/login" />} />
             <Route path="/create" element={user ? <CreatePage /> : <Navigate to="/login" />} />

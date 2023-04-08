@@ -14,8 +14,6 @@ export const CreatePage = () => {
 
   const { user } = useAuthContext();
 
-  console.log(user);
-
   //İhale Bilgileri
   const [baslik, setBaslik] = useState("");
   const [aciklama, setAciklama] = useState("");
@@ -54,7 +52,6 @@ export const CreatePage = () => {
       kategori: ihaleKategori,
       images: uploadimage,
     };
-    console.log(ihale);
     try {
       // const response = await axios.post("/api/ihale", ihale, {
       //   headers: {
@@ -72,7 +69,6 @@ export const CreatePage = () => {
         position: toast.POSITION.TOP_CENTER,
         autoClose: 2000,
       });
-      console.log(response);
       setBaslik("");
       setAciklama("");
       setIhaleKategori("kitap");

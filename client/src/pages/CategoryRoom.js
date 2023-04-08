@@ -11,7 +11,7 @@ import moment from "moment";
 import "moment/locale/tr";
 import { ScrollButton } from "../components/ScrolButton/ScrolButton";
 
-export const CategoryPage = () => {
+export const CategoryRoomPage = () => {
   const { nesne } = useParams();
   const navigate = useNavigate();
 

@@ -6,8 +6,6 @@ import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
-import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
 
 const style = {
@@ -85,15 +83,8 @@ export const IhaleRoomPage = () => {
         clearInterval(interval);
         setCountdown({ days: 0, hours: 0, minutes: 0, seconds: 0 });
         setButtonVisibility(false);
-        const durumDegistir = async () => {
-          try {
-            await axios.patch(`/api/ihale/${id}`, { durum: false });
-          } catch (error) {
-            console.log(error);
-          }
-        };
-        durumDegistir();
         console.log("Süre bitti");
+        setOpen(false);
       } else {
         setButtonVisibility(true);
         const days = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
@@ -107,47 +98,6 @@ export const IhaleRoomPage = () => {
     return () => clearInterval(interval);
   }, [endTime]);
 
-  //teklif ver tuşuna basıldığı zaman
-  // const teklifVer = async () => {
-  //   try {
-  //     const ihale = await axios.get(`/api/ihale/${id}`);
-  //     const tekliflerdb = ihale.data.ihale.teklifler;
-  //     if (ihale.data.ihale.baslangic_fiyat > verilenteklif) {
-  //       toast.error(`Minimum tutari geçmelisiniz  ${ihale.data.ihale.baslangic_fiyat}TL`, {
-  //         position: toast.POSITION.TOP_CENTER,
-  //         autoClose: 2000,
-  //       });
-  //       return;
-  //     }
-  //     if (tekliflerdb.length !== 0) {
-  //       console.log("tekliflerdb length = " + tekliflerdb.length);
-  //       if (parseInt(verilenteklif) <= parseInt(tekliflerdb[0].teklif)) {
-  //         console.log("Teklifdb teklif = " + tekliflerdb[0].teklif);
-  //         console.log("Verilen teklif = " + verilenteklif);
-  //         toast.error(`Verilen maksimum teklifi geçmelisiniz, Maksimum teklif    ${ihale.data.ihale.teklifler[0].teklif} TL`, {
-  //           position: toast.POSITION.TOP_CENTER,
-  //           autoClose: 2000,
-  //         });
-  //         console.log("Verilen maksimum teklifi geçmelisiniz, Maksimum teklif    ", ihale.data.ihale.teklifler[0].teklif);
-  //         return;
-  //       }
-  //     }
-  //     const yeniTeklifler = [{ id: user._id, teklif: verilenteklif }, ...teklifler];
-  //     await socketRef.current.emit("teklif", {
-  //       teklifler: yeniTeklifler,
-  //       id,
-  //     });
-  //     await axios.patch(`/api/ihale/${id}`, { teklifler: yeniTeklifler });
-  //     setTeklifler(yeniTeklifler);
-  //     toast.success(`Teklifiniz başarili... ${verilenteklif} TL`, {
-  //       position: toast.POSITION.TOP_CENTER,
-  //       autoClose: 2000,
-  //     });
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // };
-
   const teklifVer = async () => {
     try {
       const ihale = await axios.get(`/api/ihale/${id}`);
@@ -160,7 +110,7 @@ export const IhaleRoomPage = () => {
       if (tekliflerdb.length !== 0) {
         sonTeklif = ihale.data.ihale.teklifler[0].teklif + artismiktar;
       }
-      const yeniTeklifler = [{ id: user._id, teklif: sonTeklif }, ...teklifler];
+      const yeniTeklifler = [{ _id: user._id, teklif: sonTeklif }, ...teklifler];
       await socketRef.current.emit("teklif", {
         teklifler: yeniTeklifler,
         id,
@@ -180,7 +130,6 @@ export const IhaleRoomPage = () => {
     try {
       const ihale = await axios.get(`/api/ihale/${id}`);
       const tekliflerdb = ihale.data.ihale.teklifler;
-      const girilendeger = 100;
       let sonTeklif = 0;
       if (ekstraartis < artismiktar) {
         setOpen(false);
@@ -200,7 +149,7 @@ export const IhaleRoomPage = () => {
       if (tekliflerdb.length !== 0) {
         sonTeklif = ihale.data.ihale.teklifler[0].teklif + parseInt(ekstraartis);
       }
-      const yeniTeklifler = [{ id: user._id, teklif: sonTeklif }, ...teklifler];
+      const yeniTeklifler = [{ _id: user._id, teklif: sonTeklif }, ...teklifler];
       await socketRef.current.emit("teklif", {
         teklifler: yeniTeklifler,
         id,
@@ -228,7 +177,7 @@ export const IhaleRoomPage = () => {
           {teklifler &&
             teklifler.map((item) => (
               <div className="flex flex-col justify-between p-[6px] items-center border-2 border-black bg-slate-50 hover:bg-slate-200">
-                <div className="text-center">Teklif veren = {item.id}</div>
+                <div className="text-center">Teklif veren = {item._id}</div>
                 <div>Teklif = {item.teklif} TL</div>
               </div>
             ))}

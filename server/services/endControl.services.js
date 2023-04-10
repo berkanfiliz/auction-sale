@@ -20,7 +20,7 @@ const endControl = () => {
       const kazananUser = await userModel.findOne({ _id: ihale.teklifler[0]._id });
       console.log("Kazanan user ", kazananUser);
       console.log("Kazanan user mail = " + kazananUser.email);
-      sendMail(kazananUser.email, ihale.teklifler[0].teklif, ihale._id);
+      sendMail(kazananUser.email, ihale);
     });
   }, 1000 * 5);
 };

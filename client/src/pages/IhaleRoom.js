@@ -39,7 +39,6 @@ export const IhaleRoomPage = () => {
 
   useEffect(() => {
     socketRef.current = io.connect("http://localhost:8900"); //4000 e döndür olmazsa
-    console.log("Buraya girdiii...");
     socketRef.current.emit("room", id);
 
     const tekliflerDoldur = async () => {
@@ -47,7 +46,7 @@ export const IhaleRoomPage = () => {
       setArtismiktar(ihale.data.ihale.artis_miktari);
       const endTime = ihale.data.ihale.bitis_tarih;
       const teklifdb = ihale.data.ihale.teklifler;
-      console.log("Teklifdb = " + teklifdb);
+      // console.log("Teklifdb = " + teklifdb);
       setTeklifler(teklifdb);
       if (teklifdb.length === 0) {
         console.log("DB bos");
@@ -60,7 +59,6 @@ export const IhaleRoomPage = () => {
 
     tekliflerDoldur();
     return () => {
-      console.log("Buraya girdi temizleme fonksiyonu");
       socketRef.current.disconnect(); // Socket bağlantısını kes
     };
   }, []);
@@ -140,7 +138,6 @@ export const IhaleRoomPage = () => {
         return;
       }
       if (!ekstraartis) {
-        console.log("Ekstra artis bos");
         return;
       }
       if (tekliflerdb.length === 0) {

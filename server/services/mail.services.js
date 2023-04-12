@@ -25,7 +25,7 @@ const sendMail = (kazanan, ihale) => {
   doc.fontSize(14).fillColor("red").text("Ihale No: ", { continued: true }).fillColor("black").text(ihale._id).moveDown();
   doc.fontSize(14).fillColor("red").text("Baslik: ", { continued: true }).fillColor("black").text(ihale.baslik).moveDown();
   doc.fontSize(14).fillColor("red").text("Aciklama: ").fillColor("black").text(ihale.aciklama).moveDown();
-  doc.fontSize(14).fillColor("red").text("Baslangic Fiyat: ", { continued: true }).fillColor("black").text(ihale.baslangic_fiyat).moveDown();
+  doc.fontSize(14).fillColor("red").text("Odenecek Tutar : ", { continued: true }).fillColor("black").text(`${ihale.teklifler[0].teklif} TL`).moveDown();
   doc.fontSize(14).fillColor("red").text("Kategori: ", { continued: true }).fillColor("black").text(ihale.kategori).moveDown();
   doc.image(`./public/${ihale.image_urls[0]}`, {
     fit: [500, 500],

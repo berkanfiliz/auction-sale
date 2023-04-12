@@ -7,6 +7,7 @@ import "react-toastify/dist/ReactToastify.css";
 
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
+import { ScrollButton } from "../components/ScrolButton/ScrolButton";
 
 const style = {
   position: "absolute",
@@ -172,15 +173,18 @@ export const IhaleRoomPage = () => {
           {teklifler.length === 0 && <h1 className="text-center text-3xl text-red-600 mt-32">VERİLMİŞ TEKLİF YOKTUR</h1>}
           {verilenteklif && <ToastContainer />}
           {teklifler &&
-            teklifler.map((item) => (
-              <div className="flex flex-col justify-between p-[6px] items-center border-2 border-black bg-slate-50 hover:bg-slate-200">
+            teklifler.map((item, index) => (
+              <div className={`flex flex-col justify-between p-[6px] items-center border-4 border-black rounded-lg ${index === 0 ? "bg-green-300 hover:bg-green-400" : "bg-red-300 hover:bg-red-400"}`}>
                 <div className="text-center">Teklif veren = {item._id}</div>
-                <div>Teklif = {item.teklif} TL</div>
+                <div>
+                  {index === 0 ? <span>Güncel teklif = </span> : <span>Eski teklif = </span>}
+                  {item.teklif} TL
+                </div>
               </div>
             ))}
         </div>
-        <div className="flex flex-col justify-start items-end space-y-5 mt-10">
-          <div className="bg-slate-500 w-[270px] lg:w-[350px]  py-20 text-white flex space-x-6 items-center justify-center rounded-md">
+        <div className="flex flex-col justify-start items-end space-y-5 mt-10 ml-4">
+          <div className="bg-gray-400 text-black w-full  py-20 flex space-x-6 items-center justify-center rounded-md font-bold">
             <div className="flex flex-col justify-center items-center">
               <div>GÜN</div>
               <div>{countdown.days}</div>
@@ -200,18 +204,24 @@ export const IhaleRoomPage = () => {
             {/* {countdown.days} GÜN {countdown.hours} SAAT {countdown.minutes} DAKİKA {countdown.seconds} SANİYE */}
           </div>
           {buttonVisibility && (
-            <div className="bg-slate-500 w-[270px] lg:w-[350px] h-[220px] border text-white text-center rounded-md flex justify-center items-center space-x-10">
-              <button
-                className="bg-green-600 p-3 mt-5"
-                onClick={() => {
-                  setOpen(true);
-                }}
-              >
-                Arttırılmış Teklif
-              </button>
-              <button onClick={teklifVer} className="bg-green-600 p-3 mt-5">
-                Teklif ver
-              </button>
+            <div className="bg-gray-400 w-full h-[220px] border text-white text-center rounded-md flex flex-col justify-center items-center space-y-8">
+              <div className="flex justify-center space-x-10 items-center">
+                <button
+                  className="bg-green-500 hover:bg-green-600 p-3 mt-5"
+                  onClick={() => {
+                    setOpen(true);
+                  }}
+                >
+                  Arttırılmış Teklif
+                </button>
+                <button onClick={teklifVer} className="bg-green-500 hover:bg-green-600 p-3 mt-5">
+                  Teklif ver
+                </button>
+              </div>
+              <div className="flex flex-col text-black">
+                <div className="hover:text-zinc-300 font-semibold">Artış Miktarı = {artismiktar} TL</div>
+                <div className="text-xs">(Arttırılmış Teklif ile Ekstra Artış Sağlayabilirsiniz)</div>
+              </div>
             </div>
           )}
         </div>
@@ -239,6 +249,7 @@ export const IhaleRoomPage = () => {
           </div>
         </Box>
       </Modal>
+      <ScrollButton />
     </div>
   );
 };

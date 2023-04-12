@@ -27,3 +27,5 @@ const ihaleKazancShema = new Schema(
 );
 
 const ihaleKazancModel = mongoose.model("ihaleKazanc", ihaleKazancShema);
+
+module.exports = ihaleKazancModel;

@@ -18,7 +18,7 @@ export const TurkeyMapComp = () => {
         onClick={({ plateNumber, name }) => {
           navigate(`city/${name}`);
         }}
-        onHover={({ plateNumber, name }) => console.log("Cursor is over on " + plateNumber + " - " + name)}
+        // onHover={({ plateNumber, name }) => console.log("Cursor is over on " + plateNumber + " - " + name)}
       />
     </div>
   );

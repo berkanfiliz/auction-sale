@@ -62,7 +62,7 @@ export const AllProductPage = () => {
                 <span className="text-sm mt-2">
                   <span className="font-bold">Bitiş tarihi</span> : {moment(item.bitis_tarih).format("llll")}
                 </span>
-                <p className="text-3xl font-serif text-center">{item.baslik}</p>
+                <p className="text-xl font-mono font-bold text-center">{item.baslik}</p>
                 <p className="text-md mr-2" style={{ wordBreak: "break-all" }}>
                   {item.aciklama.slice(0, 140)}...
                 </p>

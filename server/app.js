@@ -26,6 +26,7 @@ app.use("/api", require("./routes/user.routes"));
 app.use("/api/ihale", require("./routes/ihale.routes"));
 app.use("/api/category", require("./routes/category.routes"));
 app.use("/api/mail", require("./routes/mail.routes"));
+app.use("/api/chat", require("./routes/chat.routes"));
 
 endControl();
 

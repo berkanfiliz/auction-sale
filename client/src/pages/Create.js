@@ -31,7 +31,8 @@ export const CreatePage = () => {
     fileReader.readAsDataURL(acceptedFiles[0]);
     setUploadimage(acceptedFiles[0]);
   };
-  const handleClick = async () => {
+  const handleClick = async (e) => {
+    e.preventDefault();
     if (new Date(tarih) < new Date()) {
       setBasarili(true);
       toast.error("Geçersiz tarih! Lütfen ileri bir zaman seçiniz", {
@@ -98,20 +99,20 @@ export const CreatePage = () => {
 
   return (
     <div className="container">
-      <div className="grid grid-cols-2">
+      <form onSubmit={handleClick} className="grid grid-cols-2">
         <div className="flex flex-col justify-center items-center mt-10">
           <label className="w-2/3" htmlFor="">
             İhale Basliginiz
           </label>
-          <input value={baslik} onChange={(e) => setBaslik(e.target.value)} className="w-2/3 bg-gray-200" type="text" />
+          <input value={baslik} onChange={(e) => setBaslik(e.target.value)} className="w-2/3 bg-gray-200" type="text" required />
           <label className="w-2/3" htmlFor="">
             İhale Aciklamaniz
           </label>
-          <textarea value={aciklama} onChange={(e) => setAciklama(e.target.value)} className="w-2/3 bg-gray-200 h-24" type="text" />
+          <textarea value={aciklama} onChange={(e) => setAciklama(e.target.value)} className="w-2/3 bg-gray-200 h-24" type="text" required />
           <label className="w-2/3" htmlFor="">
             İhale Category
           </label>
-          <select onChange={(e) => setIhaleKategori(e.target.value)} className="w-2/3 bg-gray-200">
+          <select onChange={(e) => setIhaleKategori(e.target.value)} className="w-2/3 p-1 bg-gray-200">
             {kategori &&
               kategori.map((item) => (
                 <option key={item._id} value={item.category}>
@@ -119,22 +120,22 @@ export const CreatePage = () => {
                 </option>
               ))}
           </select>
-          <label className="w-2/3" htmlFor="">
+          <label className="w-2/3" htmlFor="" required>
             Bitis Tarihi
           </label>
-          <input value={tarih} onChange={(e) => setTarih(e.target.value)} className="w-2/3 bg-gray-200" type="datetime-local" />
+          <input value={tarih} onChange={(e) => setTarih(e.target.value)} className="w-2/3 bg-gray-200" type="datetime-local" required />
           <label className="w-2/3" htmlFor="">
             Baslangic Fiyat
           </label>
-          <input value={baslangicfiyat} onChange={(e) => setBaslangicfiyat(e.target.value)} className="w-2/3 bg-gray-200" type="number" />
+          <input value={baslangicfiyat} onChange={(e) => setBaslangicfiyat(e.target.value)} className="w-2/3 bg-gray-200" type="number" required />
           <label className="w-2/3" htmlFor="">
             Artis Miktari
           </label>
-          <input value={artismiktar} onChange={(e) => setArtismiktar(e.target.value)} className="w-2/3 bg-gray-200" type="text" />
+          <input value={artismiktar} onChange={(e) => setArtismiktar(e.target.value)} className="w-2/3 bg-gray-200" type="text" required />
           <label className="w-2/3" htmlFor="">
             Minimum Satis Yuzdesi
           </label>
-          <input value={satisyuzde} onChange={(e) => setSatisYuzde(e.target.value)} className="w-2/3 bg-gray-200" type="number" />
+          <input value={satisyuzde} onChange={(e) => setSatisYuzde(e.target.value)} className="w-2/3 bg-gray-200" type="number" required />
         </div>
         <div className="flex flex-col justify-center items-center space-y-10">
           <Dropzone onDrop={handleDrop} accept="image/*">
@@ -152,13 +153,13 @@ export const CreatePage = () => {
               </div>
             )}
           </Dropzone>
-          <button className="bg-red-400 py-2 px-4 rounded-md" onClick={handleClick}>
+          <button type="submit" className="bg-red-400 py-2 px-4 rounded-md">
             KAYDET
           </button>
           {basarili && <ToastContainer />}
           {/* <ToastContainer /> */}
         </div>
-      </div>
+      </form>
     </div>
   );
 };

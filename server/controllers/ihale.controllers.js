@@ -1,6 +1,7 @@
 const ihaleServices = require("../services/ihale.services");
 const userServices = require("../services/user.services");
 const ihaleModel = require("../models/ihale.model");
+const chatModel = require("../models/chat.model");
 
 const fetchAll = async (req, res) => {
   try {
@@ -39,6 +40,8 @@ const createIhale = async (req, res) => {
     const image_url = files.map((file) => file.path.replace("public/", ""));
 
     const ihale = await ihaleModel.create({ ...body, image_urls: image_url });
+
+    const chatCreate = await chatModel.create({ _id: ihale._id, admin_id: ihale.olusturan_id });
 
     res.status(201).json({ success: true, message: "Successfully created", ihale });
   } catch (error) {

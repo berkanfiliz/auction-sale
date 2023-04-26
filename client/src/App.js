@@ -13,6 +13,7 @@ import { IhaleRoomPage } from "./pages/IhaleRoom";
 import { AllProductPage } from "./pages/AllProduct";
 import { CreatePage } from "./pages/Create";
 import { ProfilePage } from "./pages/Profile";
+import { ChatRoom } from "./pages/ChatRoom";
 
 export default function App() {
   //const path = `/kategori/:nesne`;
@@ -34,7 +35,7 @@ export default function App() {
             <Route path="/room/:id" element={user ? <IhaleRoomPage /> : <Navigate to="/login" />} />
             <Route path="/create" element={user ? <CreatePage /> : <Navigate to="/login" />} />
             <Route path="/profile" element={user ? <ProfilePage /> : <Navigate to="/login" />} />
-
+            <Route path="/chat/:id" element={<ChatRoom />} />
             {/* <Route path="/room/:id" element={<IhaleRoomPage />} /> */}
             <Route path="*" element={<NoPage />} />
           </Routes>

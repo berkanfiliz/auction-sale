@@ -19,4 +19,7 @@ io.on("connection", (socket) => {
     console.log("Odanin id'si = ", data.id);
     socket.to(data.id).emit("messageReturn", data);
   });
+  socket.on("message", (data) => {
+    socket.to(data.id).emit("messageGonder", data);
+  });
 });

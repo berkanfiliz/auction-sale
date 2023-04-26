@@ -10,7 +10,7 @@ const login = async (req, res, next) => {
       const token = jwtServices.createToken(user._id);
       return res.status(200).json({ success: true, data: user, accessToken: token });
     }
-    throw Error("Bilgiler yanlıs");
+    throw Error("Giris bilgileriniz hatali");
   } catch (error) {
     return res.status(400).json({ message: error.message });
   }

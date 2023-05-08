@@ -95,18 +95,18 @@ export const ContentPage = () => {
           </div>
           <div className="flex flex-col items-end space-y-5 mt-10">
             {ihale.teklifler.length === 0 ? (
-              <div className="bg-gray-300 w-full lg:w-2/3 py-20 text-center flex flex-col space-y-5 text-black">
-                <div className="text-2xl font-bold font-mono">HERHANGİ BİR TEKLİF YOKTUR</div>
+              <div className="bg-gray-300 w-full lg:w-2/3 py-20 text-center flex flex-col space-y-5 text-black shadow-lg rounded-lg">
+                <div className="text-2xl font-bold font-mono mx-1">HERHANGİ BİR TEKLİF YOKTUR</div>
                 <div>BASLANGİC FİYAT = {ihale.baslangic_fiyat} TL</div>
               </div>
             ) : (
-              <div className="bg-gray-300 w-full lg:w-2/3  py-20 text-white text-center flex flex-col space-y-5">
+              <div className="bg-gray-300 w-full lg:w-2/3  py-20 text-white text-center flex flex-col space-y-5 shadow-lg rounded-lg">
                 <div className="text-2xl font-bold font-mono text-black px-8">
                   GUNCEL TEKLİF <br /> {ihale.teklifler[0].teklif} TL
                 </div>
               </div>
             )}
-            <div className="bg-gray-300 w-full lg:w-2/3 py-20 text-white flex flex-col space-y-8 items-center justify-center font-bold">
+            <div className="bg-gray-300 w-full lg:w-2/3 py-20 text-white flex flex-col space-y-8 items-center justify-center font-bold shadow-lg rounded-lg">
               <div className="flex justify-center items-center space-x-10 text-black">
                 <div className="flex flex-col justify-center items-center">
                   <div>GÜN</div>

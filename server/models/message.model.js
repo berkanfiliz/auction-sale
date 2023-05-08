@@ -13,13 +13,6 @@ const messageSchema = mongoose.Schema(
     icerik: {
       type: String,
     },
-
-    // okundu_id: [
-    //   {
-    //     type: mongoose.Schema.Types.ObjectId,
-    //     ref: "User",
-    //   },
-    // ],
   },
   { timestamps: true, versionKey: false }
 );

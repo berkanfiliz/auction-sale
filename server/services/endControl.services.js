@@ -25,7 +25,7 @@ const endControl = () => {
       console.log("Kazanan user mail = " + kazananUser.email);
       sendMail(kazananUser.email, ihale);
     });
-  }, 1000 * 10);
+  }, 10000 * 10);
 };
 
 module.exports = {

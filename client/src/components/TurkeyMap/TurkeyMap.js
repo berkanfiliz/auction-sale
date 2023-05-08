@@ -1,25 +1,18 @@
-import { useState } from "react";
-import TurkeyMap from "turkey-map-react";
-import { useNavigate } from "react-router-dom";
+import trMap from "../../assets/tr.svg";
+import "./TurkeyMap.css"; // CSS dosyasını ekleyin
+import { useEffect, useState } from "react";
 
 export const TurkeyMapComp = () => {
-  const navigate = useNavigate();
-  //   const [hoveredProvince, setHoveredProvince] = useState(null);
+  const [showText, setShowText] = useState(false);
 
-  //   const handleProvinceHover = (region) => {
-  //     Navigate(`/?region=${region}`);
-  //     // setHoveredProvince(province);
-  //   };
+  useEffect(() => {
+    setShowText(true);
+  }, []);
 
   return (
-    <div className="container">
-      <TurkeyMap
-        hoverable={true}
-        onClick={({ plateNumber, name }) => {
-          navigate(`city/${name}`);
-        }}
-        // onHover={({ plateNumber, name }) => console.log("Cursor is over on " + plateNumber + " - " + name)}
-      />
+    <div className="container relative">
+      <p className="text-3xl text-green-600 font-bold font-serif absolute top-60 left-44">TURKİYENİN DÖRT BİR YANINDAN İHALELER</p>
+      <img className="w-full" src={trMap} alt="Turkey Map" />
     </div>
   );
 };

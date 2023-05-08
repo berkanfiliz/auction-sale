@@ -44,8 +44,18 @@ const fetchUser = async (req, res, next) => {
   }
 };
 
+const fetchAllUser = async (req, res, next) => {
+  try {
+    const users = await userServices.getalluser();
+    res.status(200).json({ success: true, message: users });
+  } catch (error) {
+    res.status(400).json({ success: false, message: error.message });
+  }
+};
+
 module.exports = {
   login,
   signup,
   fetchUser,
+  fetchAllUser,
 };

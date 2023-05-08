@@ -10,7 +10,11 @@ const getuserwithemail = (email) => {
 const getuserwithid = (_id) => {
   return userModel.findOne({ _id });
 };
+const getalluser = () => {
+  return userModel.find();
+};
 module.exports = {
+  getalluser,
   createuser,
   getuserwithemail,
   getuserwithid,

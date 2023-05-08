@@ -44,7 +44,7 @@ export const AllProductPage = () => {
     <div className="container mt-10">
       <ScrollButton />
 
-      <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 gap-6">
+      <div className="grid grid-cols sm:grid-cols-2 md:grid-cols-3 gap-6">
         {filteredIhale.map((item) => (
           <div key={item._id} className="flex flex-col w-72 shadow-md shadow-slate-400 transform transition duration-200 hover:-translate-y-4 hover:shadow-2xl hover:shadow-red-400">
             <img
@@ -60,9 +60,9 @@ export const AllProductPage = () => {
                 <span className="text-sm mt-2">
                   <span className="font-bold">Bitiş tarihi</span> : {moment(item.bitis_tarih).format("llll")}
                 </span>
-                <p className="text-xl font-mono font-bold text-center">{item.baslik}</p>
+                <p className="text-xl font-mono font-bold text-center">{item.baslik.length > 40 ? item.baslik.slice(0, 41) + "..." : item.baslik}</p>
                 <p className="text-md mr-2" style={{ wordBreak: "break-all" }}>
-                  {item.aciklama.slice(0, 140)}...
+                  {item.aciklama.slice(0, 135)}...
                 </p>
                 <div>
                   <p className="text-center mr-4 text-red-600 font-serif font-bold">BAŞLANGIÇ FİYAT</p>

@@ -4,8 +4,6 @@ import axios from "axios";
 import { formatDistanceToNow } from "date-fns";
 import tr from "date-fns/locale/tr";
 
-import { ChatBubble } from "../components/Chat/ChatBubble";
-import { ChatSender } from "../components/Chat/ChatSender";
 import { useParams } from "react-router-dom";
 import { useAuthContext } from "../hooks/useAuthContext";
 import resimsiz from "../assets/resimsiz.jpeg";

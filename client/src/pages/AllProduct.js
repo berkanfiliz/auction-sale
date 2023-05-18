@@ -4,46 +4,169 @@ import Rating from "@mui/material/Rating";
 import Typography from "@mui/material/Typography";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHeart } from "@fortawesome/free-solid-svg-icons";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import moment from "moment";
 import "moment/locale/tr";
 import { ScrollButton } from "../components/ScrolButton/ScrolButton";
 import axios from "axios";
+import { useAuthContext } from "../hooks/useAuthContext";
+import "react-toastify/dist/ReactToastify.css";
+import { toast, ToastContainer } from "react-toastify";
 
 export const AllProductPage = () => {
   const navigate = useNavigate();
+  const { user } = useAuthContext();
 
   const [value, setValue] = useState(4);
   const [ihale, setIhale] = useState([]);
+  const [favorites, setFavorites] = useState([]);
+  const location = useLocation();
+  const queryParams = new URLSearchParams(location.search);
+  const query = queryParams.get("q");
 
-  const handleFavoriteClick = (id) => {
-    setIhale((prevIhale) =>
-      prevIhale.map((item) => {
+  //Burda yapılan işlem eğer user varsa favorilerini çekip yerleştiriyoruz. Eğer user yoksa favoriler çalışmıyor.
+  useEffect(() => {
+    const fetch = async () => {
+      const ihaleresponse = await axios.get("/api/ihale");
+      const ihaleData = ihaleresponse.data.ihale;
+      setIhale(ihaleData);
+
+      const userresponse = await axios.get(`/api/user/${user._id}`);
+      const favoriler = userresponse.data.message.favorites;
+      setFavorites(favoriler);
+
+      if (favoriler.length > 0) {
+        const favorileriDoldur = ihaleData.map((item) => {
+          if (favoriler.includes(item._id)) {
+            return {
+              ...item,
+              favorite: true,
+            };
+          }
+          return item;
+        });
+        setIhale(favorileriDoldur);
+      }
+    };
+
+    if (user) {
+      fetch();
+    } else {
+      const fetchIhale = async () => {
+        try {
+          const ihaleresponse = await axios.get("/api/ihale");
+          const ihaleData = ihaleresponse.data.ihale;
+          setIhale(ihaleData);
+        } catch (error) {
+          console.log(error);
+        }
+      };
+      fetchIhale();
+    }
+  }, [user]);
+
+  //Burda yapılan arana search işlem ise eğer user varsa favorilerini çekip yerleştiriyoruz. Eğer user yoksa favoriler çalışmıyor.
+  useEffect(() => {
+    const fetchSearchResults = async () => {
+      try {
+        const response = await axios.get(`/api/ihale/search?q=${query}`);
+        const searchData = response.data.ihale;
+        setIhale(searchData);
+
+        const userresponse = await axios.get(`/api/user/${user._id}`);
+        const favoriler = userresponse.data.message.favorites;
+        setFavorites(favoriler);
+
+        if (favoriler.length > 0) {
+          const favorileriDoldur = searchData.map((item) => {
+            if (favoriler.includes(item._id)) {
+              return {
+                ...item,
+                favorite: true,
+              };
+            }
+            return item;
+          });
+          setIhale(favorileriDoldur);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    if (query) {
+      if (user) {
+        fetchSearchResults();
+      } else {
+        const fetchSearchResults = async () => {
+          try {
+            const response = await axios.get(`/api/ihale/search?q=${query}`);
+            setIhale(response.data.ihale);
+          } catch (error) {
+            console.log(error);
+          }
+        };
+        fetchSearchResults();
+      }
+    }
+  }, [query]);
+
+  const handleFavoriteClick = async (id) => {
+    if (!user) {
+      navigate("/login");
+    } else {
+      const updatedIhale = ihale.map((item) => {
         if (item._id === id) {
+          if (favorites.includes(id)) {
+            // eğer id favorilerde ise, favorilerden kaldır
+            const newFavorites = favorites.filter((fav) => fav !== id);
+            setFavorites(newFavorites);
+            toast.success(`Favorilerden kaldırma basarili`, {
+              position: toast.POSITION.TOP_CENTER,
+              autoClose: 2000,
+            });
+          } else {
+            // değilse, favorilere ekle
+            const newFavorites = [...favorites, id];
+            setFavorites(newFavorites);
+            console.log("Favorilerdemi? ", favorites);
+            toast.success(`Favorilere ekleme basarili`, {
+              position: toast.POSITION.TOP_CENTER,
+              autoClose: 2000,
+            });
+          }
+          // ilgili öğenin favori durumunu tersine çevir
           return {
             ...item,
-            favorite: !item.favorite, // ilgili öğenin favori durumunu tersine çevir
+            favorite: !item.favorite,
           };
         }
         return item;
-      })
-    );
-  };
-  useEffect(() => {
-    const fetchCategories = async () => {
-      const ihale = await axios.get("/api/ihale");
-      setIhale(ihale.data.ihale);
-    };
-    fetchCategories();
-  }, []);
+      });
+      setIhale(updatedIhale);
+      const favoritesIhale = updatedIhale.filter((item) => item.favorite === true);
+      let favoritesid = [];
+      favoritesIhale.map((item) => {
+        favoritesid.push(item._id);
+      });
 
-  console.log("İhale = ", ihale);
+      // favori değişikliklerini sunucuya kaydetmek için bir API çağrısı yapabilirsiniz
+      try {
+        console.log("Favoriler = ", favorites);
+        const response = await axios.patch(`/api/user/${user._id}`, { favorites: favoritesid });
+        console.log("Güncellenmiş response = ", response);
+      } catch (error) {
+        console.log("Error = ", error);
+      }
+    }
+  };
+
   const filteredIhale = ihale.filter((item) => item.durum === true);
 
   return (
     <div className="container mt-10">
       <ScrollButton />
-
+      {ihale && <ToastContainer />}
       <div className="grid grid-cols sm:grid-cols-2 md:grid-cols-3 gap-6">
         {filteredIhale.map((item) => (
           <div key={item._id} className="flex flex-col w-72 shadow-md shadow-slate-400 transform transition duration-200 hover:-translate-y-4 hover:shadow-2xl hover:shadow-red-400">
@@ -94,7 +217,12 @@ export const AllProductPage = () => {
                       <FontAwesomeIcon className="hover:text-red-500" icon={faHeart} color={item.favorite ? "#ff0000" : "#ccc"} />
                     </button>
                     <button>
-                      <i className="fa-regular fa-eye  p-1 px-2 rounded-md text-xl"></i>
+                      <i
+                        className="fa-regular fa-eye  p-1 px-2 rounded-md text-xl"
+                        onClick={() => {
+                          navigate(`/kategori/${item.kategori}/${item._id}`);
+                        }}
+                      ></i>
                     </button>
                   </div>
                 </div>

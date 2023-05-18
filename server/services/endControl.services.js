@@ -16,6 +16,8 @@ const endControl = () => {
         console.log("Ihale durumu güncellendi. Teklif mevcut degil");
         return;
       }
+      //BURAYA MİNİMUM SATIŞ YÜZDESİNİN KONTROLÜ GELECEK EĞER GEÇMİYORSA SATIŞ GERÇEKLEŞMİYCEK
+
       await ihaleKazancModel.create({ ihale_id: ihale._id, kazanan_id: ihale.teklifler[0].id, kazanan_teklif: ihale.teklifler[0].teklif });
       await ihaleModel.updateOne({ _id: ihale._id }, { durum: false });
       console.log("Ihale durumu güncellendi.");

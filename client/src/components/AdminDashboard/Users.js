@@ -31,43 +31,33 @@ export const Users = () => {
   };
 
   return (
-    <div className="">
-      <div className="flex flex-col items-center">
-        <table className="table-auto">
+    <div className="container mx-auto">
+      <div className="overflow-x-auto">
+        <table className="w-full">
           <thead>
             <tr>
-              <th className="px-2 py-2">User ID</th>
-              <th className="px-2 py-2">Name Surname</th>
-              <th className="px-2 py-2">Email</th>
-              <th className="px-2 py-2">Phone Number</th>
-              <th className="px-2 py-2">Address</th>
-              <th className="px-2 py-2">Active/Passive</th>
+              <th className="px-2 py-2 text-sm md:text-base">User ID</th>
+              <th className="px-2 py-2 text-sm md:text-base">Name Surname</th>
+              <th className="px-2 py-2 text-sm md:text-base">Email</th>
+              <th className="px-2 py-2 text-sm md:text-base">Phone Number</th>
+              <th className="px-2 py-2 text-sm md:text-base">Address</th>
+              <th className="px-2 py-2 text-sm md:text-base">Active/Passive</th>
             </tr>
           </thead>
           <tbody>
-            {/* <tr>
-              <td className="border px-4 py-2">1</td>
-              <td className="border px-4 py-2">berkannfiliz@gmail.com</td>
-              <td className="border px-4 py-2">John Doe</td>
-              <td className="border px-4 py-2">555-555-5555</td>
-              <td className="border px-4 py-2">123 Main St</td>
-              <td className="border px-4 py-2">
-                <button className={`${active ? "bg-green-500" : "bg-red-500"} hover:${active ? "bg-green-600" : "bg-red-600"} text-white font-bold py-2 px-4 rounded`} onClick={toggleActive}>
-                  {active ? "Active" : "Passive"}
-                </button>
-              </td>
-            </tr> */}
             {users &&
               users.map((user) => (
-                <tr>
-                  <td className="border px-2 py-2">{user._id}</td>
-                  <td className="border px-2 py-2">{user.email}</td>
-                  <td className="border px-2 py-2">{user.name}</td>
-                  <td className="border px-2 py-2">{user.phoneNumber}</td>
-                  <td className="border px-4 py-2">{user.address}</td>
-                  <button className={`${user.isActive === true ? "bg-green-500" : "bg-red-500"} hover:${user.isActive === true ? "bg-green-600" : "bg-red-600"} text-white font-bold py-2 px-4 rounded`} onClick={toggleActive}>
-                    {user.isActive === true ? "Active" : "Passive"}
-                  </button>
+                <tr key={user._id}>
+                  <td className="border px-2 py-2 text-sm md:text-base">{user._id}</td>
+                  <td className="border px-2 py-2 text-sm md:text-base">{user.email}</td>
+                  <td className="border px-2 py-2 text-sm md:text-base">{user.name}</td>
+                  <td className="border px-2 py-2 text-sm md:text-base">{user.phoneNumber}</td>
+                  <td className="border px-2 py-2 text-sm md:text-base">{user.address}</td>
+                  <td className="border px-2 py-2">
+                    <button className={`${user.isActive === true ? "bg-green-500" : "bg-red-500"} hover:${user.isActive === true ? "bg-green-600" : "bg-red-600"} text-white font-bold py-2 px-4 rounded`} onClick={toggleActive}>
+                      {user.isActive === true ? "Active" : "Passive"}
+                    </button>
+                  </td>
                 </tr>
               ))}
           </tbody>

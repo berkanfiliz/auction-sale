@@ -7,12 +7,13 @@ import "react-toastify/dist/ReactToastify.css";
 import { useAuthContext } from "../hooks/useAuthContext";
 
 export const CreatePage = () => {
+  const { user } = useAuthContext();
+
   const [kategori, setKategori] = useState([]);
   const [image, setImage] = useState("");
   const [basarili, setBasarili] = useState(false);
+  const [hata, setHata] = useState(false);
   const [uploadimage, setUploadimage] = useState(null);
-
-  const { user } = useAuthContext();
 
   //İhale Bilgileri
   const [baslik, setBaslik] = useState("");
@@ -33,6 +34,11 @@ export const CreatePage = () => {
   };
   const handleClick = async (e) => {
     e.preventDefault();
+    if (!uploadimage) {
+      setHata(true);
+      return;
+    }
+
     if (new Date(tarih) < new Date()) {
       setBasarili(true);
       toast.error("Geçersiz tarih! Lütfen ileri bir zaman seçiniz", {
@@ -153,6 +159,11 @@ export const CreatePage = () => {
               </div>
             )}
           </Dropzone>
+          {hata && (
+            <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-2 rounded relative" role="alert">
+              <span className="block sm:inline">RESİM GİRMEK ZORUNLUDUR</span>
+            </div>
+          )}
           <button type="submit" className="bg-red-400 py-2 px-4 rounded-md">
             KAYDET
           </button>

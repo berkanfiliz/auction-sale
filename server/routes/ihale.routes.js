@@ -3,9 +3,11 @@ const authMiddleware = require("../middlewares/auth.middleware");
 const multer = require("multer");
 const { upload } = require("../middlewares/multer.middleware");
 
-const { fetchAll, fetch, createIhale, updateIhale, deleteIhale, fetchWithCategoryFilter, fetchIhaleWithCreatorId } = require("../controllers/ihale.controllers");
+const { fetchAll, fetch, createIhale, updateIhale, deleteIhale, fetchWithCategoryFilter, fetchIhaleWithCreatorId, searchIhale } = require("../controllers/ihale.controllers");
 
 router.get("/", fetchAll);
+
+router.get("/search", searchIhale);
 
 router.get("/kategori/:id", fetchWithCategoryFilter);
 

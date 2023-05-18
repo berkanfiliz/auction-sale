@@ -9,40 +9,107 @@ import { faHeart } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from "react-router-dom";
 import moment from "moment";
 import "moment/locale/tr";
+import axios from "axios";
+import { useAuthContext } from "../hooks/useAuthContext";
 import { ScrollButton } from "../components/ScrolButton/ScrolButton";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export const CategoryRoomPage = () => {
+  const { user } = useAuthContext();
   const { nesne } = useParams();
   const navigate = useNavigate();
 
   const [value, setValue] = useState(4);
   const [ihale, setIhale] = useState([]);
+  const [favorites, setFavorites] = useState([]);
 
   useEffect(() => {
-    const fetchCategories = async () => {
-      const category = await api.fetchWithCategoryFilter(nesne);
-      setIhale(
-        category.data.ihale.map((item) => ({
-          ...item,
-          favorite: false, // her bir öğenin default favori durumu false olarak ayarlandı
-        }))
-      );
-    };
-    fetchCategories();
-  }, [nesne]);
+    const fetch = async () => {
+      const ihaleresponse = await api.fetchWithCategoryFilter(nesne);
+      const ihaleData = ihaleresponse.data.ihale;
+      setIhale(ihaleData);
 
-  const handleFavoriteClick = (id) => {
-    setIhale((prevIhale) =>
-      prevIhale.map((item) => {
-        if (item._id === id) {
-          return {
-            ...item,
-            favorite: !item.favorite, // ilgili öğenin favori durumunu tersine çevir
-          };
+      const userresponse = await axios.get(`/api/user/${user._id}`);
+      const favoriler = userresponse.data.message.favorites;
+      setFavorites(favoriler);
+
+      if (favoriler.length > 0) {
+        const favorileriDoldur = ihaleData.map((item) => {
+          if (favoriler.includes(item._id)) {
+            return {
+              ...item,
+              favorite: true,
+            };
+          }
+          return item;
+        });
+        setIhale(favorileriDoldur);
+      }
+    };
+
+    if (user) {
+      fetch();
+    } else {
+      const fetchIhale = async () => {
+        try {
+          const ihaleresponse = await api.fetchWithCategoryFilter(nesne);
+          const ihaleData = ihaleresponse.data.ihale;
+          setIhale(ihaleData);
+        } catch (error) {
+          console.log(error);
         }
-        return item;
-      })
-    );
+      };
+      fetchIhale();
+    }
+  }, [user, nesne]);
+
+  const handleFavoriteClick = async (id) => {
+    if (!user) {
+      navigate("/login");
+    }
+    const updatedIhale = ihale.map((item) => {
+      if (item._id === id) {
+        if (favorites.includes(id)) {
+          // eğer id favorilerde ise, favorilerden kaldır
+          const newFavorites = favorites.filter((fav) => fav !== id);
+          setFavorites(newFavorites);
+          toast.success(`Favorilerden kaldirma basarili`, {
+            position: toast.POSITION.TOP_CENTER,
+            autoClose: 2000,
+          });
+        } else {
+          // değilse, favorilere ekle
+          const newFavorites = [...favorites, id];
+          setFavorites(newFavorites);
+          toast.success(`Favorilere ekleme basarili`, {
+            position: toast.POSITION.TOP_CENTER,
+            autoClose: 2000,
+          });
+        }
+        // ilgili öğenin favori durumunu tersine çevir
+        return {
+          ...item,
+          favorite: !item.favorite,
+        };
+      }
+      return item;
+    });
+    setIhale(updatedIhale);
+    const favoritesIhale = updatedIhale.filter((item) => item.favorite === true);
+    let favoritesid = [];
+    favoritesIhale.map((item) => {
+      favoritesid.push(item._id);
+    });
+
+    // favori değişikliklerini sunucuya kaydetmek için bir API çağrısı yapabilirsiniz
+    try {
+      console.log("Favoriler = ", favorites);
+      const response = await axios.patch(`/api/user/${user._id}`, { favorites: favoritesid });
+      console.log("Güncellenmiş response = ", response);
+    } catch (error) {
+      console.log("Error = ", error);
+    }
   };
 
   const filteredIhale = ihale.filter((item) => item.durum === true);
@@ -50,6 +117,7 @@ export const CategoryRoomPage = () => {
   return (
     <div className="container mt-10">
       <ScrollButton />
+      {ihale && <ToastContainer />}
 
       <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 gap-6">
         {filteredIhale.map((item) => (
@@ -101,7 +169,12 @@ export const CategoryRoomPage = () => {
                       <FontAwesomeIcon className="hover:text-red-500" icon={faHeart} color={item.favorite ? "#ff0000" : "#ccc"} />
                     </button>
                     <button>
-                      <i className="fa-regular fa-eye  p-1 px-2 rounded-md text-xl"></i>
+                      <i
+                        className="fa-regular fa-eye  p-1 px-2 rounded-md text-xl"
+                        onClick={() => {
+                          navigate(`${item._id}`);
+                        }}
+                      ></i>
                     </button>
                   </div>
                 </div>

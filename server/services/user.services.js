@@ -13,9 +13,14 @@ const getuserwithid = (_id) => {
 const getalluser = () => {
   return userModel.find();
 };
+const updateuser = (_id, user) => {
+  return userModel.findByIdAndUpdate(_id, user, { new: true });
+};
+
 module.exports = {
   getalluser,
   createuser,
   getuserwithemail,
   getuserwithid,
+  updateuser,
 };

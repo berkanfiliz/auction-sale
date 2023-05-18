@@ -98,6 +98,20 @@ const fetchIhaleWithCreatorId = async (req, res) => {
     res.status(400).json({ success: false, message: error.message });
   }
 };
+const searchIhale = async (req, res) => {
+  try {
+    const { q } = req.query;
+    const ihale = await ihaleModel.find({
+      $or: [{ name: { $regex: q, $options: "i" } }, { baslik: { $regex: q, $options: "i" } }, { aciklama: { $regex: q, $options: "i" } }],
+    });
+    if (!ihale) {
+      throw Error("Arama sonucu bulunamadi");
+    }
+    res.status(200).json({ success: true, ihale });
+  } catch (error) {
+    res.status(400).json({ success: false, message: error.message });
+  }
+};
 
 module.exports = {
   fetchAll,
@@ -107,4 +121,5 @@ module.exports = {
   deleteIhale,
   fetchWithCategoryFilter,
   fetchIhaleWithCreatorId,
+  searchIhale,
 };

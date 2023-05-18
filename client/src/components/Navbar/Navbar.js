@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuthContext } from "../../hooks/useAuthContext";
 import { useLogout } from "../../hooks/useLogout";
+import { Search } from "./Search";
 
 export const Navbar = () => {
   const { user } = useAuthContext();
@@ -93,10 +94,7 @@ export const Navbar = () => {
           </div>
         </div>
         <div className="relative">
-          <input className="w-36 sm:w-40 md:w-72 border-2 rounded-full p-2 relative focus:border-green-400" type="text" placeholder="Search" />
-          <div>
-            <i className="absolute right-3 top-1 bg-green-400 fa-solid fa-magnifying-glass border rounded-full p-2 "></i>
-          </div>
+          <Search />
         </div>
         {/* //DROPDOWN */}
         <div className="border-2 rounded-full px-3 py-2">

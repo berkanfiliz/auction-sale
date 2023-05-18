@@ -11,7 +11,7 @@ export const TurkeyMapComp = () => {
 
   return (
     <div className="container relative">
-      <p className="text-3xl text-green-600 font-bold font-serif absolute top-60 left-44">TURKİYENİN DÖRT BİR YANINDAN İHALELER</p>
+      <p className="text-3xl text-green-600 hover:text-green-700 font-bold font-serif absolute top-60 left-44">TURKİYE'NİN DÖRT BİR YANINDAN İHALELER</p>
       <img className="w-full" src={trMap} alt="Turkey Map" />
     </div>
   );

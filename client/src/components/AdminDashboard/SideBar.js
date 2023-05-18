@@ -4,15 +4,12 @@ import { MdOutlineDashboard } from "react-icons/md";
 import { RiSettings4Line } from "react-icons/ri";
 import { TbReportAnalytics } from "react-icons/tb";
 import { AiOutlineUser, AiOutlineHeart } from "react-icons/ai";
-import { FiMessageSquare, FiFolder, FiShoppingCart } from "react-icons/fi";
+import { FiMessageSquare, FiFolder } from "react-icons/fi";
 import { Users } from "./Users";
-import { useNavigate } from "react-router-dom";
 import { DashboardHome } from "./DashboardHome";
 import { Categories } from "./Categories";
 
 export const SideBar = () => {
-  const navigate = useNavigate();
-
   const handleClick = (e, menu) => {
     e.preventDefault();
     setClick(menu.name);
@@ -25,8 +22,7 @@ export const SideBar = () => {
     { name: "Aktif ihaleler", icon: TbReportAnalytics },
     { name: "Pasif ihaleler", icon: FiFolder },
     // { name: "Go to homepage", icon: FiShoppingCart },
-    { name: "Saved", icon: AiOutlineHeart, margin: true },
-    { name: "Setting", icon: RiSettings4Line },
+    { name: "Settings", icon: RiSettings4Line },
   ];
   const [open, setOpen] = useState(true);
   const [click, setClick] = useState("dashboard");
@@ -69,7 +65,7 @@ export const SideBar = () => {
           ))}
         </div>
       </div>
-      <div className="container mt-8 text-xl text-gray-900 font-semibold">
+      <div className="container mt-8 text-xl text-gray-900 font-semibold relative">
         <div>{click === "Dashboard" && <DashboardHome />}</div>
         <div>{click === "Users" && <Users />}</div>
         {/* <div>{click === "Go to homepage" && navigate("/")}</div> */}

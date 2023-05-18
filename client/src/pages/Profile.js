@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
 import { useAuthContext } from "../hooks/useAuthContext";
-import { Tabs, Tab, Box } from "@material-ui/core";
+import { Tab, Tabs, TabPanel } from "react-tabs";
 import axios from "axios";
+import "react-tabs/style/react-tabs.css";
 
 export const ProfilePage = () => {
   const { user } = useAuthContext();
@@ -15,19 +16,12 @@ export const ProfilePage = () => {
     ihaleGetir();
   }, []);
 
-  function TabPanel(props) {
-    const { children, value, index } = props;
-    return (
-      <div role="tabpanel" hidden={value !== index}>
-        {value === index && <Box p={3}>{children}</Box>}
-      </div>
-    );
-  }
   const [value, setValue] = useState(0);
 
-  const handleChange = (event, newValue) => {
-    setValue(newValue);
+  const handleChange = (index) => {
+    setValue(index);
   };
+
   console.log(user._id);
 
   return (
@@ -36,10 +30,11 @@ export const ProfilePage = () => {
         <div className="flex flex-col space-y-4">
           <h1 className="text-3xl">Berkan Filiz</h1>
           <div className="bg-slate-200">
-            <Tabs value={value} onChange={handleChange}>
-              <Tab label="İLANLARIM" />
-              <Tab label="FAVORİLERİM" />
-              <Tab label="TEKLİF VERİLEN İLANLAR" />
+            <Tabs selectedIndex={value} onSelect={handleChange}>
+              <Tab>BİLGİLERİM</Tab>
+              <Tab>İLANLARIM</Tab>
+              <Tab>FAVORİLERİM</Tab>
+              <Tab>TEKLİF VERİLEN İLANLAR</Tab>
             </Tabs>
           </div>
         </div>
@@ -50,15 +45,19 @@ export const ProfilePage = () => {
         </div>
       </div>
 
-      <TabPanel value={value} index={0}>
+      <TabPanel selected={value === 0}>
+        <h2>BİLGİLERİM</h2>
+        <p>Buraya kullanıcıların bilgileri koyulup bunlar düzenlenecek.</p>
+      </TabPanel>
+      <TabPanel selected={value === 1}>
         <h2>İLANLARIM</h2>
         <p>Buraya oluşturulan ihaleler koyulacak.</p>
       </TabPanel>
-      <TabPanel value={value} index={1}>
+      <TabPanel selected={value === 2}>
         <h2>FAVORILERIM</h2>
         <p>Buraya favorilere eklenen ihaleler koyulacak.</p>
       </TabPanel>
-      <TabPanel value={value} index={2}>
+      <TabPanel selected={value === 3}>
         <h2>TEKLİF VERİLEN İLANLAR</h2>
         <p>Buraya Teklif verilen ve süren ilanlar koyulacak.</p>
       </TabPanel>

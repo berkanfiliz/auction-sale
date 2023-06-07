@@ -2,6 +2,7 @@ const ihaleServices = require("../services/ihale.services");
 const userServices = require("../services/user.services");
 const ihaleModel = require("../models/ihale.model");
 const chatModel = require("../models/chat.model");
+const userModel = require("../models/user.model");
 
 const fetchAll = async (req, res) => {
   try {
@@ -107,9 +108,55 @@ const searchIhale = async (req, res) => {
     if (!ihale) {
       throw Error("Arama sonucu bulunamadi");
     }
-    res.status(200).json({ success: true, ihale });
+    const ihaleler = ihale.filter((ihale) => ihale.durum === true);
+    res.status(200).json({ success: true, ihale: ihaleler });
   } catch (error) {
     res.status(400).json({ success: false, message: error.message });
+  }
+};
+
+const fetchmyihale = async (req, res) => {
+  try {
+    const ihale = await ihaleModel.find({ olusturan_id: req.params.id });
+    if (!ihale) {
+      throw Error("Geçersiz id");
+    }
+    return res.status(200).json({ success: true, ihale });
+  } catch (error) {
+    res.status(400).json({ success: false, message: error.message });
+  }
+};
+
+const fetchFavoriteIhaleler = async (req, res) => {
+  try {
+    // Kullanıcının favori ihalelerini getir
+    const user = await userModel.findById(req.params.id).populate("favorites");
+
+    if (!user) {
+      return res.status(404).json({ success: false, message: "Kullanıcı bulunamadı" });
+    }
+
+    const favoriteIhaleler = user.favorites;
+
+    res.status(200).json({ success: true, favoriteIhaleler });
+  } catch (error) {
+    res.status(500).json({ success: false, message: "Sunucu hatası" });
+  }
+};
+const fetchYorumlar = async (req, res) => {
+  try {
+    const ihaleId = req.params.id;
+
+    // İhaleyi bul
+    const ihale = await ihaleModel.findById(ihaleId).populate("yorumlar.kullanici_id");
+
+    if (!ihale) {
+      return res.status(404).json({ error: "İhale bulunamadı" });
+    }
+
+    res.status(200).json({ success: true, yorumlar: ihale.yorumlar });
+  } catch (error) {
+    res.status(500).json({ success: false, error: "Sunucu hatası" });
   }
 };
 
@@ -122,4 +169,7 @@ module.exports = {
   fetchWithCategoryFilter,
   fetchIhaleWithCreatorId,
   searchIhale,
+  fetchmyihale,
+  fetchFavoriteIhaleler,
+  fetchYorumlar,
 };

@@ -2,8 +2,19 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Box, Modal } from "@mui/material";
 import Dropzone from "react-dropzone";
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from "@mui/material";
+import { makeStyles } from "@mui/styles";
+
+const useStyles = makeStyles({
+  tableHeader: {
+    backgroundColor: "#000",
+    color: "#fff",
+  },
+});
 
 export const Categories = () => {
+  const classes = useStyles();
+
   const [category, setCategory] = useState([]);
 
   const [fetchCategories, setFetchCategories] = useState([]);
@@ -27,9 +38,8 @@ export const Categories = () => {
   useEffect(() => {
     const getCategories = async () => {
       try {
-        const category = await axios.get("/api/category");
-        setFetchCategories(category.data.category);
-        console.log("Categories ", category.data.category);
+        const categories = await axios.get("/api/category");
+        setFetchCategories(categories.data.category);
       } catch (error) {
         console.log(error);
       }
@@ -47,48 +57,85 @@ export const Categories = () => {
   const handleClick = (e) => {
     e.preventDefault();
     if (!category) {
+      console.log("category boş");
       return;
     }
     if (!uploadimage) {
       setHata(true);
       return;
     }
+    const addCategory = {
+      category: category,
+      images: uploadimage,
+    };
+    const createCategory = async () => {
+      try {
+        console.log("Gonderilen ", addCategory);
+        const sendCategory = await axios.post("/api/category", addCategory, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        });
+        setFetchCategories([...fetchCategories, sendCategory.data.category]);
+        setOpen(false);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    createCategory();
   };
-
+  const deleteFunction = async (id) => {
+    try {
+      const deleteCategory = await axios.delete(`/api/category/${id}`);
+      setFetchCategories(fetchCategories.filter((category) => category._id !== id));
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  console.log("Fetch Categories", fetchCategories);
   return (
-    <div className="container mt-20">
-      <div className="flex flex-col items-center">
-        <table className="table-auto">
-          <thead>
-            <tr>
-              <th className="px-2 py-2">Kategori ID</th>
-              <th className="px-2 py-2">Kategori İsim</th>
-              <th className="px-4 py-2">Kategori İmage</th>
-              <th className="px-2 py-2">Update Kategori</th>
-              <th className="px-2 py-2">Delete Kategori</th>
-            </tr>
-          </thead>
-          <tbody>
-            {fetchCategories &&
-              fetchCategories.map((kategori) => (
-                <tr>
-                  <td className="border px-2 py-2">{kategori._id}</td>
-                  <td className="border px-2 py-2">{kategori.category}</td>
-                  <td className="border px-4 py-2">Kategori image</td>
-                  <td className="border px-2 py-2">
-                    <button className="p-2 bg-green-400">Update</button>
-                  </td>
-                  <td className="border px-4 py-2">
-                    <button className="p-2 bg-red-500 mx-auto">Delete</button>
-                  </td>
-                </tr>
-              ))}
-          </tbody>
-        </table>
-      </div>
-      <button onClick={() => setOpen(true)} className="bg-red-400 p-3 hover:bg-red-600 absolute top-0 left-24">
+    <div className="container flex flex-col">
+      <button
+        onClick={() => {
+          setOpen(true);
+        }}
+        className="bg-red-400 p-3 hover:bg-red-600"
+      >
         CREATE CATEGORY
       </button>
+      <TableContainer component={Paper} style={{ overflowX: "auto" }}>
+        <Table>
+          <TableHead>
+            <TableRow>
+              <TableCell className={classes.tableHeader}>Kategori ID</TableCell>
+              <TableCell className={classes.tableHeader}>Kategori İsim</TableCell>
+              <TableCell className={classes.tableHeader}>Kategori İmage</TableCell>
+              <TableCell className={classes.tableHeader}>Delete Kategori</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {fetchCategories &&
+              fetchCategories.map((kategori) => (
+                <TableRow key={`${kategori._id}`}>
+                  <TableCell>{kategori._id}</TableCell>
+                  <TableCell>{kategori.category}</TableCell>
+                  <TableCell>{kategori.image_urls && <img className="object-cover w-14 h-14" src={`http://localhost:4000/` + kategori.image_urls[0]} />}</TableCell>
+                  <TableCell>
+                    <button
+                      className="p-2 bg-red-500 mx-auto"
+                      onClick={() => {
+                        deleteFunction(kategori._id);
+                      }}
+                    >
+                      Delete
+                    </button>
+                  </TableCell>
+                </TableRow>
+              ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
+
       <Modal
         open={open}
         onClose={() => {

@@ -1,18 +1,29 @@
 import React, { useEffect, useState } from "react";
 import { HiMenuAlt3 } from "react-icons/hi";
 import { MdOutlineDashboard } from "react-icons/md";
-import { RiSettings4Line } from "react-icons/ri";
 import { TbReportAnalytics } from "react-icons/tb";
 import { AiOutlineUser, AiOutlineHeart } from "react-icons/ai";
 import { FiMessageSquare, FiFolder } from "react-icons/fi";
-import { Users } from "./Users";
-import { DashboardHome } from "./DashboardHome";
-import { Categories } from "./Categories";
+import { Users } from "./Content/Users";
+import { DashboardHome } from "./Content/DashboardHome";
+import { Categories } from "./Content/Categories";
+import { ActiveTable } from "./Content/ActiveTable";
+import { PassiveTable } from "./Content/PassiveTable";
+import { useNavigate } from "react-router-dom";
 
 export const SideBar = () => {
+  const navigate = useNavigate();
   const handleClick = (e, menu) => {
     e.preventDefault();
-    setClick(menu.name);
+    if (menu.name === "Dashboard") setContent(<DashboardHome />);
+    if (menu.name === "Users") setContent(<Users />);
+    if (menu.name === "Categories") setContent(<Categories />);
+    if (menu.name === "Aktif ihaleler") setContent(<ActiveTable />);
+    if (menu.name === "Pasif ihaleler") setContent(<PassiveTable />);
+    if (menu.name === "Go to homepage") {
+      navigate("/");
+      window.location.reload();
+    }
     console.log(`Tıklanan: ${menu.name}`);
   };
   const menus = [
@@ -21,12 +32,11 @@ export const SideBar = () => {
     { name: "Categories", icon: FiMessageSquare },
     { name: "Aktif ihaleler", icon: TbReportAnalytics },
     { name: "Pasif ihaleler", icon: FiFolder },
-    // { name: "Go to homepage", icon: FiShoppingCart },
-    { name: "Settings", icon: RiSettings4Line },
+    { name: "Go to homepage", icon: FiFolder },
   ];
   const [open, setOpen] = useState(true);
-  const [click, setClick] = useState("dashboard");
   const [isSmallScreen, setIsSmallScreen] = useState(false);
+  const [content, setContent] = useState(<DashboardHome />);
 
   useEffect(() => {
     const handleResize = () => {
@@ -43,12 +53,12 @@ export const SideBar = () => {
     }
   }, [isSmallScreen]);
   return (
-    <section className="flex gap-6">
+    <section className="flex">
       <div className={`bg-[#0e0e0e] min-h-screen ${open ? "w-72" : "w-16"} duration-500 text-gray-100 px-4`}>
         <div className="py-3 flex justify-end">
           <HiMenuAlt3 size={26} className="cursor-pointer" onClick={() => setOpen(!open)} />
         </div>
-        <div className="mt-4 flex flex-col gap-4 relative">
+        <div className="mt-4 flex flex-col gap-8 relative">
           {menus?.map((menu, i) => (
             <div key={i} onClick={(e) => handleClick(e, menu)} className={` ${menu?.margin && "mt-5"} group flex items-center text-sm  gap-3.5 font-medium p-2 hover:bg-gray-800 rounded-md`}>
               <div>{React.createElement(menu?.icon, { size: "20" })}</div>
@@ -65,11 +75,8 @@ export const SideBar = () => {
           ))}
         </div>
       </div>
-      <div className="container mt-8 text-xl text-gray-900 font-semibold relative">
-        <div>{click === "Dashboard" && <DashboardHome />}</div>
-        <div>{click === "Users" && <Users />}</div>
-        {/* <div>{click === "Go to homepage" && navigate("/")}</div> */}
-        <div>{click === "Categories" && <Categories />}</div>
+      <div className="container mt-8 text-xl text-gray-900 font-semibold">
+        <div>{content}</div>
       </div>
     </section>
   );

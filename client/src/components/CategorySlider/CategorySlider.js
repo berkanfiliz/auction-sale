@@ -120,7 +120,7 @@ export const CategorySlider = () => {
                 handleCategoryClick(item.category);
               }}
             >
-              <CardMedia className={classes.media} image={item.image} title={item.category} />
+              <CardMedia className={classes.media} image={`http://localhost:4000/${item.image_urls[0]}`} title={item.category} />
               <CardContent className={classes.center}>
                 <Typography gutterBottom variant="h6" component="h2">
                   {item.category.toUpperCase()}

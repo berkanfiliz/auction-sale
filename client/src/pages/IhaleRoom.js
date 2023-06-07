@@ -35,7 +35,7 @@ export const IhaleRoomPage = () => {
   const [artismiktar, setArtismiktar] = useState(null);
   const [countdown, setCountdown] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
   const [endTime, setEndTime] = useState("");
-  const [buttonVisibility, setButtonVisibility] = useState(false);
+  const [buttonVisibility, setButtonVisibility] = useState(true);
   const [loading, setLoading] = useState(true);
 
   //Modal için
@@ -47,6 +47,10 @@ export const IhaleRoomPage = () => {
 
     const tekliflerDoldur = async () => {
       const ihale = await axios.get(`/api/ihale/${id}`);
+      console.log("Durum = ", ihale.data.ihale.durum);
+      if (!ihale.data.ihale.durum) {
+        setButtonVisibility(false);
+      }
       setArtismiktar(ihale.data.ihale.artis_miktari);
       const endTime = ihale.data.ihale.bitis_tarih;
       const teklifdb = ihale.data.ihale.teklifler;
@@ -88,7 +92,6 @@ export const IhaleRoomPage = () => {
         console.log("Süre bitti");
         setOpen(false);
       } else {
-        setButtonVisibility(true);
         const days = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
         const hours = Math.floor((timeDiff / (1000 * 60 * 60)) % 24);
         const minutes = Math.floor((timeDiff / 1000 / 60) % 60);

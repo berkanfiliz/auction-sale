@@ -51,7 +51,7 @@ const ihaleSchema = new Schema(
     },
     teklifler: [
       {
-        _id: { type: Schema.Types.ObjectId },
+        _id: { type: Schema.Types.ObjectId, ref: "user" },
         teklif: { type: Number },
       },
     ],

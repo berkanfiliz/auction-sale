@@ -143,7 +143,7 @@ export const CategoryRoomPage = () => {
                   <p className="text-center mr-4 text-red-600 font-serif font-bold">BAŞLANGIÇ FİYAT</p>
                   <p className="text-xl text-center mr-4 text-red-600 font-bold font-mono">{item.baslangic_fiyat} TL</p>
                 </div>
-                <Box
+                {/* <Box
                   sx={{
                     "& > legend": { mt: 2 },
                   }}
@@ -156,7 +156,7 @@ export const CategoryRoomPage = () => {
                       setValue(newValue);
                     }}
                   />
-                </Box>
+                </Box> */}
 
                 <div className="flex items-center">
                   <div className=" w-1/2 mb-2">

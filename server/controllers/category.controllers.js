@@ -1,3 +1,4 @@
+const categoryModel = require("../models/category.model");
 const categoryServices = require("../services/category.services");
 
 const fetchAllCategory = async (req, res) => {
@@ -11,7 +12,14 @@ const fetchAllCategory = async (req, res) => {
 
 const createCategory = async (req, res) => {
   try {
-    const category = await categoryServices.createCategory(req.body);
+    const { body, files } = req;
+
+    // Map uploaded images to image_url array
+    const category_url = files.map((file) => file.path.replace("public/", ""));
+
+    const category = await categoryModel.create({ ...body, image_urls: category_url });
+
+    //const category = await categoryServices.createCategory(req.body);
     res.status(201).json({ success: true, message: "Successfully created", category });
   } catch (error) {
     res.status(400).json({ success: false, message: error.message });

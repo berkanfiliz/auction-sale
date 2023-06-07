@@ -15,9 +15,30 @@ import { CreatePage } from "./pages/Create";
 import { ProfilePage } from "./pages/Profile";
 import { ChatRoom } from "./pages/ChatRoom";
 import { AdminDashboard } from "./pages/AdminDashboard";
+import { useEffect, useState } from "react";
+import { Yetkisiz } from "./components/AdminDashboard/Yetkisiz";
+import axios from "axios";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export default function App() {
   const { user } = useAuthContext();
+  const [isAdmin, setIsAdmin] = useState(false);
+  console.log("Adminmisin, ", isAdmin);
+
+  useEffect(() => {
+    if (user) {
+      const fetchUser = async () => {
+        try {
+          const response = await axios.get(`/api/user/${user._id}`);
+          setIsAdmin(response.data.message.isAdmin);
+        } catch (error) {
+          console.error(error);
+        }
+      };
+      fetchUser();
+    }
+  }, [user]);
 
   return (
     <div className="App bg-color">
@@ -31,7 +52,7 @@ export default function App() {
         <div className="pages">
           <Routes>
             <Route path="/" element={<HomePage />} />
-            <Route path="/admin" element={<AdminDashboard />} />
+            <Route path="/admin" element={!user ? <LoginPage /> : isAdmin ? <AdminDashboard /> : <Yetkisiz />} />
             <Route path="/login" element={!user ? <LoginPage /> : <Navigate to="/" />} />
             <Route path="/register" element={!user ? <RegisterPage /> : <Navigate to="/" />} />
             <Route path="/allproducts" element={<AllProductPage />} />

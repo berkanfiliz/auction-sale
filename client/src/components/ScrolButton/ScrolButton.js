@@ -27,8 +27,8 @@ export const ScrollButton = () => {
   }, []);
 
   return (
-    <div className={`fixed right-0 bottom-0 mb-10 mr-10 ${isVisible ? "block" : "hidden"}`}>
-      <button onClick={scrollToTop} className="bg-green-400 hover:bg-green-600 text-white font-bold py-2 px-4 rounded-full">
+    <div className={`fixed right-5 bottom-5 md:right-10 md:bottom-10  ${isVisible ? "block" : "hidden"}`}>
+      <button onClick={scrollToTop} className="bg-green-400 hover:bg-green-600 text-white font-bold px-2 md:py-2 md:px-4 rounded-full">
         <i className="fa-solid fa-up-long text-2xl"></i>
       </button>
     </div>

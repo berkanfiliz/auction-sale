@@ -1,10 +1,12 @@
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { format } from "date-fns";
 import axios from "axios";
 import { useAuthContext } from "../hooks/useAuthContext";
 import { ScrollButton } from "../components/ScrolButton/ScrolButton";
 import ClipLoader from "react-spinners/ClipLoader";
+import ImageGallery from "react-image-gallery";
+import "react-image-gallery/styles/css/image-gallery.css";
+import "../components/Content/Content.css";
 
 export const ContentPage = () => {
   const navigate = useNavigate();
@@ -12,17 +14,33 @@ export const ContentPage = () => {
   const { user } = useAuthContext();
   const [countdown, setCountdown] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
   const [endTime, setEndTime] = useState("");
-  const [buttonVisibility, setButtonVisibility] = useState(false);
+  const [buttonVisibility, setButtonVisibility] = useState(true);
   const [ihale, setIhale] = useState(null);
   const [yorum, setYorum] = useState("");
+  const [images, setImages] = useState([]);
   const [dbyorumlar, setDbYorumlar] = useState([{ kullanici_id: {}, yorum: "" }]);
   let [loading, setLoading] = useState(true);
+  const [currentIndex, setCurrentIndex] = useState(0);
+
+  const onSlide = (currentIndex) => {
+    setCurrentIndex(currentIndex);
+  };
 
   useEffect(() => {
     const fetchIhale = async () => {
       try {
         const response = await axios.get(`/api/ihale/${id}`);
+        if (!response.data.ihale.durum) {
+          setButtonVisibility(false);
+        }
         setIhale(response.data.ihale);
+        const newImages = response.data.ihale.image_urls.map((url) => ({
+          original: `http://localhost:4000/${url}`,
+          thumbnail: `http://localhost:4000/${url}`,
+          originalWidth: 800,
+          originalHeight: 600,
+        }));
+        setImages(newImages);
         const endTime = response.data.ihale.bitis_tarih;
         console.log(response.data.ihale);
         setEndTime(endTime);
@@ -57,7 +75,6 @@ export const ContentPage = () => {
         setButtonVisibility(false);
         console.log("Süre bitti");
       } else {
-        setButtonVisibility(true);
         const days = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
         const hours = Math.floor((timeDiff / (1000 * 60 * 60)) % 24);
         const minutes = Math.floor((timeDiff / 1000 / 60) % 60);
@@ -105,11 +122,9 @@ export const ContentPage = () => {
         <div>
           <div className="grid md:grid-cols-2 grid-col-1">
             {/* IHALE BASLİK VE ACİKLAMA */}
-            <div className="flex flex-col mt-10 space-y-10 mr-4">
-              <div className="text-4xl text-center font-bold font-serif">{ihale.baslik.toUpperCase()}</div>
-              <div className="h-[455px] w-full">
-                <img className="w-full h-full" src={`http://localhost:4000/${ihale.image_urls[0]}`} alt="" />
-              </div>
+            <div className="flex flex-col mt-10 space-y-10 mr-4 w-full">
+              <div className="text-2xl lg:text-3xl text-center font-bold font-serif">{ihale.baslik.toUpperCase()}</div>
+              <ImageGallery items={images} startIndex={currentIndex} onSlide={onSlide} showIndex={true} showFullscreenButton={false} slideInterval={2000} slideOnThumbnailOver={true} autoPlay={true} />
             </div>
             <div className="flex flex-col items-end space-y-5 mt-10">
               {ihale.teklifler.length === 0 ? (
@@ -124,32 +139,32 @@ export const ContentPage = () => {
                   </div>
                 </div>
               )}
-              <div className="bg-gray-300 w-full lg:w-2/3 py-20 text-white flex flex-col space-y-8 items-center justify-center font-bold shadow-lg rounded-lg">
-                <div className="flex justify-center items-center space-x-10 text-black">
-                  <div className="flex flex-col justify-center items-center">
-                    <div>GÜN</div>
-                    <div>{countdown.days}</div>
+              {buttonVisibility && (
+                <div className="bg-gray-300 w-full lg:w-2/3 py-20 text-white flex flex-col space-y-8 items-center justify-center font-bold shadow-lg rounded-lg h-2/4">
+                  <div className="flex justify-center items-center space-x-10 text-black">
+                    <div className="flex flex-col justify-center items-center">
+                      <div>GÜN</div>
+                      <div>{countdown.days}</div>
+                    </div>
+                    <div className="flex flex-col justify-center items-center">
+                      <div>SAAT</div>
+                      <div>{countdown.hours}</div>
+                    </div>
+                    <div className="flex flex-col justify-center items-center">
+                      <div>DAKİKA</div>
+                      <div>{countdown.minutes}</div>
+                    </div>
+                    <div className="flex flex-col justify-center items-center">
+                      <div>SANİYE</div>
+                      <div>{countdown.seconds}</div>
+                    </div>
                   </div>
-                  <div className="flex flex-col justify-center items-center">
-                    <div>SAAT</div>
-                    <div>{countdown.hours}</div>
-                  </div>
-                  <div className="flex flex-col justify-center items-center">
-                    <div>DAKİKA</div>
-                    <div>{countdown.minutes}</div>
-                  </div>
-                  <div className="flex flex-col justify-center items-center">
-                    <div>SANİYE</div>
-                    <div>{countdown.seconds}</div>
-                  </div>
-                </div>
 
-                {buttonVisibility && (
                   <button className="bg-red-600 hover:bg-red-700 p-3" onClick={handleSendData}>
                     TEKLİF ODASINA GİT
                   </button>
-                )}
-              </div>
+                </div>
+              )}
             </div>
           </div>
           {/* Açıklama */}

@@ -28,15 +28,22 @@ const userSchema = new Schema(
       type: String,
       required: true,
     },
-    imageUrl: {
-      type: String,
-    },
+    image_urls: [
+      {
+        type: String,
+      },
+    ],
     address: {
       type: String,
       required: true,
     },
     favorites: {
-      type: Array,
+      type: [
+        {
+          type: Schema.Types.ObjectId,
+          ref: "ihale",
+        },
+      ],
     },
   },
   { timestamps: true, versionKey: false }

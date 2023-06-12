@@ -129,7 +129,6 @@ export const AllProductPage = () => {
             // değilse, favorilere ekle
             const newFavorites = [...favorites, id];
             setFavorites(newFavorites);
-            console.log("Favorilerdemi? ", favorites);
             toast.success(`Favorilere ekleme basarili`, {
               position: toast.POSITION.TOP_CENTER,
               autoClose: 2000,
@@ -152,11 +151,9 @@ export const AllProductPage = () => {
 
       // favori değişikliklerini sunucuya kaydetmek için bir API çağrısı yapabilirsiniz
       try {
-        console.log("Favoriler = ", favorites);
         const response = await axios.patch(`/api/user/${user._id}`, { favorites: favoritesid });
-        console.log("Güncellenmiş response = ", response);
       } catch (error) {
-        console.log("Error = ", error);
+        console.log(error);
       }
     }
   };

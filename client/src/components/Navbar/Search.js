@@ -12,8 +12,6 @@ export const Search = () => {
   const handleSearch = async () => {
     try {
       const response = await axios.get(`/api/ihale/search?q=${query}`);
-      // Verileri işleyin veya kullanın
-      console.log(response.data);
       if (response.data.ihale.length == 0) {
         toast.error(`Arama Sonucu Bulunamadi`, {
           position: toast.POSITION.TOP_CENTER,

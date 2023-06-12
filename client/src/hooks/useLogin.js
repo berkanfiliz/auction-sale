@@ -13,10 +13,8 @@ export const useLogin = () => {
       const user = { _id: response.data.data._id, accessToken: response.data.accessToken };
       dispatch({ type: "LOGIN", payload: user });
       localStorage.setItem("user", JSON.stringify(user));
-      console.log(response);
       return response;
     } catch (error) {
-      //console.log(error.response.data);
       //setHata(error.response.data.message);
       return error.response;
       //return error.response.data.message;

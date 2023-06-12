@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import Modal from "react-modal";
 import resimsiz from "../../assets/resimsiz.jpeg";
+import Dropzone from "react-dropzone";
 
 const customStyles = {
   content: {
@@ -19,7 +20,8 @@ const customStyles = {
 export const AccountInformation = ({ userAccount }) => {
   const [user, setUser] = useState([]);
   const [modalIsOpen, setModalIsOpen] = useState(false);
-  const [imageUrl, setImageUrl] = useState([]);
+  const [image, setImage] = useState([]);
+  const [uploadimage, setUploadimage] = useState(null);
   const [userInformation, setUserInformation] = useState({
     name: "",
     email: "",
@@ -35,9 +37,17 @@ export const AccountInformation = ({ userAccount }) => {
 
   useEffect(() => {
     setUser(userAccount);
-    console.log("Account", userAccount);
-    setImageUrl(userAccount.image_urls);
+    setImage(userAccount.image_urls);
   }, [userAccount]);
+
+  const handleDrop = (acceptedFiles) => {
+    const fileReader = new FileReader();
+    fileReader.onload = () => {
+      setImage(fileReader.result);
+    };
+    fileReader.readAsDataURL(acceptedFiles[0]);
+    setUploadimage(acceptedFiles[0]);
+  };
 
   const handleOpenModal = () => {
     setModalIsOpen(true);
@@ -61,10 +71,19 @@ export const AccountInformation = ({ userAccount }) => {
 
   const handleSaveChanges = async () => {
     if (userInformation.name && userInformation.email && userInformation.address && userInformation.phoneNumber) {
-      const response = await axios.patch(`/api/user/${user._id}`, userInformation);
+      const formData = new FormData();
+      formData.append("images", uploadimage);
+      formData.append("name", userInformation.name);
+      formData.append("email", userInformation.email);
+      formData.append("address", userInformation.address);
+      formData.append("phoneNumber", userInformation.phoneNumber);
+      const response = await axios.patch(`/api/userImage/${user._id}`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
       setModalIsOpen(false);
       setUser(response.data.message);
-      console.log(response.data);
     } else {
       setError({
         nameError: !userInformation.name,
@@ -77,7 +96,7 @@ export const AccountInformation = ({ userAccount }) => {
 
   return (
     <div className="container mx-auto font-serif">
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div className="max-w-md mx-auto mt-8 p-6 bg-white shadow-lg rounded-lg">
           <h1 className="text-2xl mb-4">Hesap Bilgileri</h1>
           <div className="mb-4">
@@ -104,7 +123,7 @@ export const AccountInformation = ({ userAccount }) => {
             Update
           </button>
         </div>
-        <div className="flex justify-center items-center ">{userAccount.image_urls && userAccount.image_urls.length > 0 ? <img src={`http://localhost:4000/` + userAccount.image_urls[0]} alt="user" className="rounded-full w-80 h-80" /> : <img src={resimsiz} className="rounded-full w-80 h-80" />}</div>
+        <div className="flex justify-center items-center ">{image ? <img src={image} alt="user" className="rounded-full w-80 h-80" /> : <img src={resimsiz} className="rounded-full w-80 h-80" />}</div>
       </div>
 
       <Modal isOpen={modalIsOpen} onRequestClose={handleCloseModal} style={customStyles}>
@@ -130,6 +149,25 @@ export const AccountInformation = ({ userAccount }) => {
             <input type="text" className={`appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${error.phoneNumberError ? "border-red-500" : ""}`} placeholder="Phone Number" value={userInformation.phoneNumber} onChange={(e) => setUserInformation({ ...userInformation, phoneNumber: e.target.value })} />
             {error.phoneNumberError && <p className="text-red-500 text-sm">Lütfen telefon numaranızı giriniz.</p>}
           </div>
+          <div className="mb-4 flex flex-col justify-center items-center ">
+            <label className="block text-gray-700 font-bold mb-2">İmage:</label>
+            <Dropzone onDrop={handleDrop} accept="image/*">
+              {({ getRootProps, getInputProps }) => (
+                <div {...getRootProps()} className="h-[250px] w-[80%] border border-black rounded-sm bg-white">
+                  <input {...getInputProps()} />
+                  {image ? (
+                    <img src={image} alt="selected" style={{ height: "100%", width: "100%" }} />
+                  ) : (
+                    <div className="text-center mt-10 flex flex-col space-y-4">
+                      <i className="fa-solid fa-upload text-[100px]"></i>
+                      <p>CHOOSE YOUR IMAGE</p>
+                    </div>
+                  )}
+                </div>
+              )}
+            </Dropzone>
+          </div>
+
           <div className="flex justify-end">
             <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-2" onClick={handleSaveChanges}>
               Save

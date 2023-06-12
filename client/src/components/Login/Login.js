@@ -14,12 +14,11 @@ export const Login = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(email, password);
     const sonuc = await login(email, password);
     setHata(sonuc.data.message);
   };
   return (
-    <section className="h-screen bg-gray-100 flex justify-center items-center">
+    <section className="h-[88vh] bg-gray-100 flex justify-center items-center">
       <div className="w-full max-w-md px-6 py-16 bg-white rounded-lg shadow-lg">
         <h1 className="text-2xl font-bold text-gray-800 text-center mb-6">Giriş Yap</h1>
         <form onSubmit={handleSubmit} className="space-y-4">

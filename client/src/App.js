@@ -24,7 +24,6 @@ import "react-toastify/dist/ReactToastify.css";
 export default function App() {
   const { user } = useAuthContext();
   const [isAdmin, setIsAdmin] = useState(false);
-  console.log("Adminmisin, ", isAdmin);
 
   useEffect(() => {
     if (user) {

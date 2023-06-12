@@ -10,9 +10,9 @@ export const TurkeyMapComp = () => {
   }, []);
 
   return (
-    <div className="container relative">
-      <p className="text-3xl text-green-600 hover:text-green-700 font-bold font-serif absolute top-60 left-44">TURKİYE'NİN DÖRT BİR YANINDAN İHALELER</p>
+    <div className="relative container">
       <img className="w-full" src={trMap} alt="Turkey Map" />
+      <p className="absolute text-center inset-0 flex items-center justify-center md:text-xl lg:text-3xl text-green-600 font-bold font-serif">TÜRKİYE'NİN DÖRT BİR YANINDAN İHALELER</p>
     </div>
   );
 };

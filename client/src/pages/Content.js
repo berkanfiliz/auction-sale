@@ -7,6 +7,7 @@ import ClipLoader from "react-spinners/ClipLoader";
 import ImageGallery from "react-image-gallery";
 import "react-image-gallery/styles/css/image-gallery.css";
 import "../components/Content/Content.css";
+import { Yorum } from "../components/Yorum/Yorum";
 
 export const ContentPage = () => {
   const navigate = useNavigate();
@@ -16,9 +17,7 @@ export const ContentPage = () => {
   const [endTime, setEndTime] = useState("");
   const [buttonVisibility, setButtonVisibility] = useState(true);
   const [ihale, setIhale] = useState(null);
-  const [yorum, setYorum] = useState("");
   const [images, setImages] = useState([]);
-  const [dbyorumlar, setDbYorumlar] = useState([{ kullanici_id: {}, yorum: "" }]);
   let [loading, setLoading] = useState(true);
   const [currentIndex, setCurrentIndex] = useState(0);
 
@@ -42,23 +41,12 @@ export const ContentPage = () => {
         }));
         setImages(newImages);
         const endTime = response.data.ihale.bitis_tarih;
-        console.log(response.data.ihale);
         setEndTime(endTime);
       } catch (error) {
         console.error(error);
       }
     };
-    const fetchYorumlar = async () => {
-      try {
-        const response = await axios.get(`/api/ihale/${id}`);
-        setDbYorumlar(response.data.ihale.yorumlar);
-      } catch (error) {
-        console.error(error);
-      }
-    };
     fetchIhale();
-    fetchYorumlar();
-
     return () => {
       setEndTime("");
     };
@@ -96,20 +84,6 @@ export const ContentPage = () => {
     } else {
       navigate(`/login`);
     }
-  };
-  const yorumYap = async (e) => {
-    try {
-      e.preventDefault();
-      const yorumlar = [{ kullanici_id: user, yorum }, ...dbyorumlar];
-      const response = await axios.patch(`/api/ihale/${id}`, { yorumlar });
-      console.log(response.data.data.yorumlar);
-      setDbYorumlar(yorumlar);
-    } catch (error) {
-      console.log("error");
-    }
-    console.log("Yorum = ", yorum);
-
-    setYorum("");
   };
 
   return (
@@ -173,31 +147,7 @@ export const ContentPage = () => {
             <p className="text-gray-700 font-serif">{ihale.aciklama}</p>
           </div>
           {/* Yorum Yapma */}
-          <div className="mt-10 w-full lg:w-2/3 container">
-            <form onSubmit={yorumYap} className="bg-gray-100 rounded-lg p-4 mb-4">
-              <h3 className="text-lg font-semibold mb-4">Yorum Yaz</h3>
-              <div className="mb-4">
-                <textarea onChange={(e) => setYorum(e.target.value)} value={yorum} className="block w-full border-gray-300 rounded-md shadow-sm p-2" rows="4" placeholder="Yorumunuzu buraya yazın" required></textarea>
-              </div>
-              <div className="text-right">
-                <button className="inline-block px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 focus:bg-red-800 focus:outline-none">Gönder</button>
-              </div>
-            </form>
-            <h2 className="text-xl font-semibold mb-4 mt-10">Yorumlar</h2>
-            {dbyorumlar &&
-              dbyorumlar.map((yorum) => (
-                <div className="bg-gray-100 rounded-lg p-4 mb-4">
-                  <div className="flex items-center space-x-4 mb-4">
-                    <div className="h-10 w-10 rounded-full overflow-hidden">Resim</div>
-                    <div>
-                      <div className="font-semibold">Kullanıcı Adı</div>
-                      <div className="text-gray-500 text-sm">01.01.2022</div>
-                    </div>
-                  </div>
-                  <div className="text-gray-700">{yorum.yorum}</div>
-                </div>
-              ))}
-          </div>
+          <Yorum />
         </div>
       )}
       <ScrollButton />

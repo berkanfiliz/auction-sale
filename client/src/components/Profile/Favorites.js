@@ -20,7 +20,7 @@ export const Favorites = () => {
         const response = await axios.get(`api/ihale/favorites/${user._id}`);
         setIhale(response.data.favoriteIhaleler);
       } catch (error) {
-        console.log("Error: ", error);
+        console.log(error);
       }
     };
     fetchFavoritesIhale();
@@ -36,12 +36,11 @@ export const Favorites = () => {
         return;
       }
       const favoritesId = updatedIhale.map((item) => item._id);
-      console.log("object", favoritesId);
       const response = await axios.patch(`/api/user/${user._id}`, { favorites: [favoritesId] });
       setIhale(updatedIhale);
       toast.success("Favorilerden çıkarıldı", { autoClose: 2000 });
     } catch (error) {
-      console.log("Error: ", error);
+      console.log(error);
     }
   };
 

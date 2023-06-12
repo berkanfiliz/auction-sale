@@ -18,10 +18,9 @@ export const Ilan = () => {
     const fetchMyIhale = async () => {
       try {
         const response = await axios.get(`api/ihale/myihale/${user._id}`);
-        console.log("Response: ", response.data.ihale);
         setIhale(response.data.ihale);
       } catch (error) {
-        console.log("Error: ", error);
+        console.log(error);
       }
     };
     fetchMyIhale();
@@ -49,13 +48,11 @@ export const Ilan = () => {
     try {
       const updatingIhale = ihale.filter((item) => item._id === id);
       const myihale = ihale.filter((item) => item._id !== id);
-      console.log("Update ", updatingIhale);
-      console.log(myihale);
       const response = await axios.patch(`api/ihale/${id}`, { ...updatingIhale, durum: false });
 
       setIhale([...myihale, response.data.data]);
     } catch (error) {
-      console.log("Error: ", error);
+      console.log(error);
     }
   };
 

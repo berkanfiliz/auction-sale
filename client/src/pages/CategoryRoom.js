@@ -1,9 +1,6 @@
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import * as api from "../api/index";
-import Box from "@mui/material/Box";
-import Rating from "@mui/material/Rating";
-import Typography from "@mui/material/Typography";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHeart } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from "react-router-dom";
@@ -104,11 +101,9 @@ export const CategoryRoomPage = () => {
 
     // favori değişikliklerini sunucuya kaydetmek için bir API çağrısı yapabilirsiniz
     try {
-      console.log("Favoriler = ", favorites);
       const response = await axios.patch(`/api/user/${user._id}`, { favorites: favoritesid });
-      console.log("Güncellenmiş response = ", response);
     } catch (error) {
-      console.log("Error = ", error);
+      console.log(error);
     }
   };
 

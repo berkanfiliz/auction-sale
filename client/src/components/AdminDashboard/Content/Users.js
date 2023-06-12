@@ -22,7 +22,6 @@ export const Users = () => {
       try {
         const user = await axios.get("/api/users");
         setUsers(user.data.message);
-        console.log("Userım ", user.data.message);
       } catch (error) {
         console.log(error);
       }
@@ -52,7 +51,6 @@ export const Users = () => {
   const toggleActive = async (id, isActive) => {
     try {
       const changeActive = await axios.patch(`/api/user/${id}`, { isActive: !isActive });
-      console.log("Change Active ", changeActive);
       setUsers(users.map((user) => (user._id === id ? { ...user, isActive: !isActive } : user)));
     } catch (error) {
       console.log(error);

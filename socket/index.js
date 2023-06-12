@@ -12,7 +12,7 @@ io.on("connection", (socket) => {
   //console.log(socket.id);
   socket.on("room", (data) => {
     socket.join(data);
-    console.log("Kullanici odaya bağlandi" + data);
+    console.log("Kullanici odaya bağlandi = " + data);
   });
   socket.on("teklif", (data) => {
     console.log("Datam = " + data);

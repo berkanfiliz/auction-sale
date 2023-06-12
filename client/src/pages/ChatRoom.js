@@ -34,9 +34,8 @@ export const ChatRoom = () => {
     };
   }, []);
   useEffect(() => {
-    console.log("Socket değiştiiiiii");
+    console.log("Socket değişti");
     socketRef.current.on("messageGonder", (data) => {
-      console.log("Dataaaaaaa = ", data);
       // const teklifVeren = data.teklifVeren;
       setMessages([...data.messages]);
     });

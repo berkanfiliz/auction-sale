@@ -1,5 +1,6 @@
 const categoryModel = require("../models/category.model");
 const categoryServices = require("../services/category.services");
+const ihaleModel = require("../models/ihale.model");
 
 const fetchAllCategory = async (req, res) => {
   try {
@@ -40,6 +41,17 @@ const updateCategory = async (req, res) => {
 
 const deleteCategory = async (req, res) => {
   try {
+    const fetchCategories = await categoryModel.findById(req.params.id);
+    if (!fetchCategories) {
+      throw Error("İd yanlış");
+    }
+    console.log("fetchCategories = ", fetchCategories);
+    console.log("İd = ", req.params.id);
+    const ihale = await ihaleModel.find({ kategori: fetchCategories.category });
+    console.log("İhale = ", ihale);
+    if (ihale.length > 0) {
+      throw Error("Kategoriye ait ihaleler var. Kategori silinemez.");
+    }
     const category = await categoryServices.deleteCategory(req.params.id);
     res.status(201).json({ success: true, message: "Successfully deleted" });
   } catch (error) {

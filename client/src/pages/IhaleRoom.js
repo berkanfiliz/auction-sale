@@ -4,7 +4,6 @@ import { useNavigate, useParams } from "react-router-dom";
 import io from "socket.io-client";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 import ClipLoader from "react-spinners/ClipLoader";
@@ -47,7 +46,6 @@ export const IhaleRoomPage = () => {
 
     const tekliflerDoldur = async () => {
       const ihale = await axios.get(`/api/ihale/${id}`);
-      console.log("Durum = ", ihale.data.ihale.durum);
       if (!ihale.data.ihale.durum) {
         setButtonVisibility(false);
       }
@@ -57,7 +55,6 @@ export const IhaleRoomPage = () => {
       // console.log("Teklifdb = " + teklifdb);
       setTeklifler(teklifdb);
       if (teklifdb.length === 0) {
-        console.log("DB bos");
         setVerilenteklif(ihale.data.ihale.baslangic_fiyat);
       } else {
         setVerilenteklif(ihale.data.ihale.teklifler[0].teklif + ihale.data.ihale.artis_miktari);
@@ -73,9 +70,7 @@ export const IhaleRoomPage = () => {
 
   //socket devreye girdiği zaman
   useEffect(() => {
-    console.log("Socket değişti");
     socketRef.current.on("messageReturn", (data) => {
-      console.log("Data = ", data);
       // const teklifVeren = data.teklifVeren;
       setTeklifler([...data.teklifler]);
     });
@@ -89,7 +84,6 @@ export const IhaleRoomPage = () => {
         clearInterval(interval);
         setCountdown({ days: 0, hours: 0, minutes: 0, seconds: 0 });
         setButtonVisibility(false);
-        console.log("Süre bitti");
         setOpen(false);
       } else {
         const days = Math.floor(timeDiff / (1000 * 60 * 60 * 24));

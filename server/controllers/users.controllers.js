@@ -68,11 +68,23 @@ const updateUser = async (req, res, next) => {
     res.status(400).json({ success: false, message: error.message });
   }
 };
-
+const updateUserImage = async (req, res, next) => {
+  try {
+    const { files } = req;
+    const image_url = files.map((file) => file.path.replace("public/", ""));
+    req.body.image_urls = image_url;
+    const user = await userServices.updateuser(req.params.id, req.body);
+    if (!user) throw Error("Kullanici bulunamadi");
+    res.status(200).json({ success: true, message: user });
+  } catch (error) {
+    res.status(400).json({ success: false, message: error.message });
+  }
+};
 module.exports = {
   login,
   signup,
   fetchUser,
   fetchAllUser,
   updateUser,
+  updateUserImage,
 };

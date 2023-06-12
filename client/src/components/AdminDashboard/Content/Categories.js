@@ -4,6 +4,7 @@ import { Box, Modal } from "@mui/material";
 import Dropzone from "react-dropzone";
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from "@mui/material";
 import { makeStyles } from "@mui/styles";
+import { toast, ToastContainer } from "react-toastify";
 
 const useStyles = makeStyles({
   tableHeader: {
@@ -57,7 +58,6 @@ export const Categories = () => {
   const handleClick = (e) => {
     e.preventDefault();
     if (!category) {
-      console.log("category boş");
       return;
     }
     if (!uploadimage) {
@@ -70,7 +70,6 @@ export const Categories = () => {
     };
     const createCategory = async () => {
       try {
-        console.log("Gonderilen ", addCategory);
         const sendCategory = await axios.post("/api/category", addCategory, {
           headers: {
             "Content-Type": "multipart/form-data",
@@ -78,6 +77,10 @@ export const Categories = () => {
         });
         setFetchCategories([...fetchCategories, sendCategory.data.category]);
         setOpen(false);
+        toast.success("Kategori başarıyla oluşturuldu.");
+        setCategory("");
+        setImage("");
+        setUploadimage(null);
       } catch (error) {
         console.log(error);
       }
@@ -88,11 +91,11 @@ export const Categories = () => {
     try {
       const deleteCategory = await axios.delete(`/api/category/${id}`);
       setFetchCategories(fetchCategories.filter((category) => category._id !== id));
+      toast.success("Kategori başarıyla silindi.");
     } catch (error) {
-      console.log(error);
+      toast.error("Silme işlemi başarısız oldu.");
     }
   };
-  console.log("Fetch Categories", fetchCategories);
   return (
     <div className="container flex flex-col">
       <button
@@ -177,13 +180,13 @@ export const Categories = () => {
                 <span className="block sm:inline">RESİM GİRMESİ ZORUNLUDUR</span>
               </div>
             )}
-
             <button onClick={handleClick} className="bg-green-500 p-3 mt-5">
               Kaydet
             </button>
           </div>
         </Box>
       </Modal>
+      <ToastContainer />
     </div>
   );
 };

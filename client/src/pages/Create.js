@@ -48,7 +48,6 @@ export const CreatePage = () => {
         position: toast.POSITION.TOP_CENTER,
         autoClose: 2000,
       });
-      console.log("Geçersiz eski tarih");
       return;
     }
 
@@ -102,7 +101,6 @@ export const CreatePage = () => {
   useEffect(() => {
     const getCategory = async () => {
       const category = await fetchCategory();
-      console.log(category.data.category);
       setKategori(category.data.category);
     };
     getCategory();

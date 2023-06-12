@@ -59,10 +59,8 @@ export const ActiveTable = () => {
   };
 
   const toggleActive = async (id, durum) => {
-    console.log("Deneme");
     try {
       const changeActive = await axios.patch(`/api/ihale/${id}`, { durum: !durum });
-      console.log("Change Active ", changeActive);
       setFetchIhale(fetchIhale.map((ihale) => (ihale._id === id ? { ...ihale, durum: !durum } : ihale)));
     } catch (error) {
       console.log(error);

@@ -24,7 +24,6 @@ export const SideBar = () => {
       navigate("/");
       window.location.reload();
     }
-    console.log(`Tıklanan: ${menu.name}`);
   };
   const menus = [
     { name: "Dashboard", icon: MdOutlineDashboard },

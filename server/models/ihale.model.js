@@ -59,6 +59,7 @@ const ihaleSchema = new Schema(
       {
         kullanici_id: { type: Schema.Types.ObjectId, ref: "user" },
         yorum: { type: String },
+        tarih: { type: Date, default: Date.now },
       },
     ],
     degerlendirme: {

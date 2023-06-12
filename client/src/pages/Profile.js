@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useAuthContext } from "../hooks/useAuthContext";
-import { Tab, Tabs, TabPanel } from "react-tabs";
+import { Tab, TabList, Tabs } from "react-tabs";
 import axios from "axios";
 import "react-tabs/style/react-tabs.css";
 import { AccountInformation } from "../components/Profile/AccountInformation";
@@ -15,10 +15,8 @@ export const ProfilePage = () => {
 
   useEffect(() => {
     const fetchUser = async () => {
-      console.log("Buraya girdi");
       const response = await axios.get(`api/user/${user._id}`);
       setUserAccount(response.data.message);
-      console.log("UserAccount: ", response.data.message);
     };
     fetchUser();
   }, []);
@@ -26,7 +24,6 @@ export const ProfilePage = () => {
   const handleChange = (index) => {
     setValue(index);
   };
-  console.log("User bilgi ", userAccount);
 
   return (
     <div className="container">
@@ -34,19 +31,18 @@ export const ProfilePage = () => {
         <div className="flex flex-col space-y-4">
           <h1 className="text-3xl">{userAccount.name}</h1>
           <div className="">
-            <Tabs selectedIndex={value} onSelect={handleChange} className="text-gray-600 grid grid-cols-1 sm:grid-cols-4 gap-10">
-              <Tab className={`${value === 0 ? "bg-green-500 text-white" : "bg-gray-200"} py-2 px-4 rounded-lg cursor-pointer border border-black  mt-auto`}>
-                <span>BİLGİLERİM</span>
-              </Tab>
-              <Tab className={`${value === 1 ? "bg-green-500 text-white" : "bg-gray-200"} py-2 px-4 rounded-lg cursor-pointer mt-auto border border-black`}>
-                <span>IHALELERİM</span>
-              </Tab>
-              <Tab className={`${value === 2 ? "bg-green-500 text-white" : "bg-gray-200"} py-2 px-4 rounded-lg cursor-pointer mt-auto border border-black`}>
-                <span>FAVORİLERİM</span>
-              </Tab>
-              {/* <Tab className={`${value === 3 ? "bg-green-500 text-white" : "bg-gray-200"} py-2 px-4 rounded-lg cursor-pointer mt-auto border border-black`}>
-                <span>TEKLİFLİ IHALELER</span>
-              </Tab> */}
+            <Tabs selectedIndex={value} onSelect={handleChange} className="">
+              <TabList className={"text-gray-600 grid grid-cols-1 sm:grid-cols-4 gap-10"}>
+                <Tab className={`${value === 0 ? "bg-green-500 text-white" : "bg-gray-200"} py-2 px-4 rounded-lg cursor-pointer border border-black  mt-auto`}>
+                  <span>BİLGİLERİM</span>
+                </Tab>
+                <Tab className={`${value === 1 ? "bg-green-500 text-white" : "bg-gray-200"} py-2 px-4 rounded-lg cursor-pointer mt-auto border border-black`}>
+                  <span>IHALELERİM</span>
+                </Tab>
+                <Tab className={`${value === 2 ? "bg-green-500 text-white" : "bg-gray-200"} py-2 px-4 rounded-lg cursor-pointer mt-auto border border-black`}>
+                  <span>FAVORİLERİM</span>
+                </Tab>
+              </TabList>
             </Tabs>
           </div>
         </div>
@@ -58,19 +54,27 @@ export const ProfilePage = () => {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-4 mt-4">
-        <TabPanel selected={value === 0} className="col-span-1 lg:col-span-4">
-          <AccountInformation userAccount={userAccount} />
-        </TabPanel>
-        <TabPanel selected={value === 1} className="col-span-1 lg:col-span-4">
-          <Ilan />
-        </TabPanel>
-        <TabPanel selected={value === 2} className="col-span-1 lg:col-span-4">
-          <Favorites userAccount={userAccount} />
-        </TabPanel>
-        <TabPanel selected={value === 3} className="col-span-1 lg:col-span-4">
-          <TeklifIlan />
-          <p>Buraya Teklif verilen ve süren ilanlar koyulacak.</p>
-        </TabPanel>
+        {value === 0 && (
+          <div className="col-span-1 lg:col-span-4">
+            <AccountInformation userAccount={userAccount} />
+          </div>
+        )}
+        {value === 1 && (
+          <div className="col-span-1 lg:col-span-4">
+            <Ilan />
+          </div>
+        )}
+        {value === 2 && (
+          <div className="col-span-1 lg:col-span-4">
+            <Favorites userAccount={userAccount} />
+          </div>
+        )}
+        {value === 3 && (
+          <div className="col-span-1 lg:col-span-4">
+            <TeklifIlan />
+            <p>Buraya Teklif verilen ve süren ilanlar koyulacak.</p>
+          </div>
+        )}
       </div>
     </div>
   );

@@ -153,7 +153,6 @@ const fetchYorumlar = async (req, res) => {
     if (!ihale) {
       return res.status(404).json({ error: "İhale bulunamadı" });
     }
-
     res.status(200).json({ success: true, yorumlar: ihale.yorumlar });
   } catch (error) {
     res.status(500).json({ success: false, error: "Sunucu hatası" });
